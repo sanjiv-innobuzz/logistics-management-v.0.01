@@ -1,0 +1,42 @@
+import { StyleSheet, Platform, StatusBar, Dimensions } from "react-native";
+
+const design = (insets, theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      marginTop: StatusBar.currentHeight,
+      paddingHorizontal: 60,
+      justifyContent: "flex-end",
+      backgroundColor: "transparent",
+    },
+    mainBg: {
+      flex: 1,
+    },
+    username: {
+      marginVertical: 10,
+      borderRadius: 40,
+    },
+    usernameTextStyle: {
+      height: 40,
+    },
+    password: {
+      marginVertical: 10,
+      borderRadius: 40,
+    },
+    passwordTextStyle: {
+      height: 40,
+    },
+    loginBtn: {
+      height: 50,
+      marginTop: 10,
+      borderRadius: 40,
+    },
+    signupTxt: {
+      color: "white",
+      borderRadius: 40,
+      height: 50,
+      marginBottom: Platform.OS === "ios" ? insets.bottom + 60 : 80,
+    },
+  });
+
+export default design;

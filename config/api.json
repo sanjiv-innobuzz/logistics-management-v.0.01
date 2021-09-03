@@ -1,0 +1,37 @@
+{
+  "url": "http://134.255.216.211:5000",
+  "routes": {
+    "login": "/api/v0.0.1/user/login",
+    "changePassword": "/api/v0.0.1/user/changePassword",
+    "editUserDetails": "/api/v0.0.1/user/editUserDetails",
+    "register": "/api/v0.0.1/user/register",
+    "getUsers": "/api/v0.0.1/user/getUsers",
+    "getCurrentUser": "/api/v0.0.1/user/getCurrentUser",
+    "addShipment": "/api/v0.0.1/shipment/addShipment",
+    "getShipments": "/api/v0.0.1/shipment/getShipments",
+    "getAllShipments": "/api/v0.0.1/shipment/getAllShipments",
+    "getShipmentDetails": "/api/v0.0.1/shipment/getShipmentDetails",
+    "packagingMaterialStatus": "/api/v0.0.1/shipment/packagingMaterialStatus",
+    "schedule": "/api/v0.0.1/shipment/schedule",
+    "productionSchedule": "/api/v0.0.1/shipment/productionSchedule",
+    "documentStatus": "/api/v0.0.1/shipment/documentStatus",
+    "shipmentSchedule": "/api/v0.0.1/shipment/shipmentSchedule",
+    "documentDispatchStatus": "/api/v0.0.1/shipment/documentDispatchStatus",
+
+    "deliverySchedule": "/api/v0.0.1/shipment/deliverySchedule",
+    "finalPayment": "/api/v0.0.1/shipment/finalPayment",
+    "fileUpload": "/api/v0.0.1/file/fileUpload",
+    "addArticle": "/api/v0.0.1/news/addArticle",
+    "getArtiles": "/api/v0.0.1/news/getArtiles"
+  },
+  "requestConfig": {
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  },
+  "requestConfigMultipart": {
+    "headers": {
+      "Content-Type": "multipart/form-data"
+    }
+  }
+}
