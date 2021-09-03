@@ -2,7 +2,7 @@
   "build": {
     "base": {
       "node": "12.13.0",
-      "npm": "6.14.14",
+      "yarn": "1.22.5",
       "env": {
         "EXAMPLE_ENV": "example value"
       },
