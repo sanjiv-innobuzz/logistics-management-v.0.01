@@ -93,6 +93,7 @@ export default design = (theme) =>
     },
     contentContainerStyle: {
       flexBasis: "80%",
+      // alignSelf: "center",
     },
     iconContainerStyle: {
       marginRight: "10%",

@@ -25,19 +25,20 @@ export const addShipment = (body, callback) => async (dispatch) => {
         throw e;
       });
 
-    dispatch({
-      type: "addShipment",
-      shipment: shipment.data,
-    });
-    //call push notify
+    if (shipment.data.status == "new") {
+      dispatch({
+        type: "addShipment",
+        shipment: shipment.data,
+      });
+    }
 
     callback(true);
   } catch (e) {
     console.log(e);
-    dispatch({
-      type: "error",
-      message: e || e.response.data.message,
-    });
+    // dispatch({
+    //   type: "error",
+    //   message: e || e.response.data.message,
+    // });
     callback(false);
   }
 };
@@ -53,18 +54,18 @@ export const getShipments = (body, cb) => async (dispatch) => {
         throw e;
       });
 
-    cb();
+    cb(true);
 
     dispatch({
       type: "getShipments",
       shipment: shipments.data,
     });
   } catch (e) {
-    dispatch({
-      type: "error",
-      message: e.response.data.message,
-    });
-    cb();
+    // dispatch({
+    //   type: "error",
+    //   message: e.response.data.message,
+    // });
+    cb(false);
   }
 };
 
@@ -102,8 +103,8 @@ export const getShipmentDetails = (body, cb) => async (dispatch) => {
         throw e;
       });
 
-    // console.log("---", shipment.data);
-    cb();
+    // console.log("--ship---", shipment.data);
+    cb(true);
 
     dispatch({
       type: "getShipmentDetails",
@@ -111,11 +112,11 @@ export const getShipmentDetails = (body, cb) => async (dispatch) => {
     });
   } catch (e) {
     console.log(e);
-    dispatch({
-      type: "error",
-      message: e || e.response.data.message,
-    });
-    cb(null);
+    // dispatch({
+    //   type: "error",
+    //   message: e || e.response.data.message,
+    // });
+    cb(false);
   }
 
   // axios
@@ -364,5 +365,29 @@ const sendNotification = async (email, title, message) => {
   }
 };
 
-//TODO duplicacy check in uploaded files.
-// (eg. multiple instance of same files must not be selected)
+//for  pulll to refresh
+export const getMoreShipments = (body, cb) => async (dispatch) => {
+  try {
+    token = await SecureStore.getItemAsync("token");
+    requestConfig.headers["X-Auth-Token"] = token;
+
+    let shipments = await axios
+      .post(`${url}${routes.getShipments}`, body, requestConfig)
+      .catch((e) => {
+        throw e;
+      });
+
+    cb(true);
+
+    dispatch({
+      type: "getShipments",
+      shipment: shipments.data,
+    });
+  } catch (e) {
+    // dispatch({
+    //   type: "error",
+    //   message: e.response.data.message,
+    // });
+    cb(false);
+  }
+};

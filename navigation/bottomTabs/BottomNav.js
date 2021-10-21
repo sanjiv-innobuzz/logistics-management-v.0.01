@@ -101,6 +101,7 @@ const BottomNav = ({ handleHeader, headerData, getCurrentUser }) => {
                   onPress={() => {
                     navigation.navigate("ShipmentNav", {
                       screen: "AddShipment",
+                      params: { pi: "" },
                     });
                   }}
                 ></Button>

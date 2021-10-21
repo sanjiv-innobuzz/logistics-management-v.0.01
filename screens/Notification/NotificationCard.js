@@ -11,8 +11,8 @@ import { View, StyleSheet } from "react-native";
 import moment from "moment";
 
 const renderItemIcon = (props) => (
-  <View style={{ marginBottom: 20 }}>
-    <Icon {...props} name="person" />
+  <View style={{ marginTop: 1 }}>
+    <Icon {...props} name="bell-outline" />
   </View>
 );
 export default function NotificationCard({

@@ -1,8 +1,6 @@
 import React from "react";
-import { View, Image } from "react-native";
+import { View, ScrollView } from "react-native";
 import {
-  Drawer,
-  DrawerGroup,
   useTheme,
   Icon,
   Menu,
@@ -18,7 +16,7 @@ import { connect } from "react-redux";
 import { ModelPopUp } from "./ViewUsers/ModelPopUp";
 import ConfirmPopUp from "./AddClient/ConfirmPopUp";
 import design from "./AddShipment/common/design";
-import { editUserVarification } from "../api/user/userActions";
+import { editUserVarification, getUsers } from "../api/user/userActions";
 
 const UserIcon = (props) => <Icon {...props} name="person-outline" />;
 
@@ -48,25 +46,38 @@ const ViewUsers = ({
   navigation,
   handleHeader,
   userList,
+  getUsers,
   editUserVarification,
+  route,
 }) => {
+  const { userUpdated = false } = route?.params;
   const [selectedIndex, setSelectedIndex] = React.useState(null);
   const [warning, setWarning] = React.useState(false);
   const [isVarified, setIsVarified] = React.useState(false);
   const [selectedUser, setSelectedUser] = React.useState("");
+  const [loader, setLoader] = React.useState(false);
 
   const insets = useSafeAreaInsets();
   const theme = useTheme();
   const styles = design(insets, theme);
 
   React.useEffect(() => {
-    // console.log("users", userList);
     const unsubscribe = navigation.addListener("focus", () => {
       handleHeader("Users", ""); //to set header
     });
     return unsubscribe;
   }, [navigation]);
 
+  const getUpdatedUsers = () => {
+    getUsers({}, (userStatus) => {
+      console.log("users -", userStatus);
+      setLoader(false);
+    });
+  };
+  React.useEffect(() => {
+    setLoader(true);
+    getUpdatedUsers();
+  }, [route]);
   const handleModal = (isVarified, email) => {
     setSelectedUser(email);
     setIsVarified(isVarified);
@@ -83,10 +94,18 @@ const ViewUsers = ({
       { isVerified: varifictionConformations, email: selectedUser },
       (status) => {
         console.log("edit varifiaction details", status);
+        getUpdatedUsers();
         setWarning(false);
       }
     );
   };
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", () => {
+      navigation.navigate("Dashboard");
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <>
@@ -99,74 +118,84 @@ const ViewUsers = ({
         editUser={true}
         handleUserVarification={handleUserVarification}
       />
-      <View style={{ flex: 1 }}>
-        {/* <Button >TOGGLE MODAL</Button> */}
-
-        <Menu
-          selectedIndex={selectedIndex}
-          onSelect={(index) => setSelectedIndex(index)}
+      {loader ? (
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          {userList != undefined ? (
-            userList?.clients
-              .sort(function (a, b) {
-                if (a.fname < b.fname) {
-                  return -1;
-                }
-                if (a.fname > b.fname) {
-                  return 1;
-                }
-                return 0;
-              })
-              .map((user, index) => {
-                return (
-                  <MenuGroup
-                    title={user.fname + " " + user.lname}
-                    accessoryLeft={UserIcon}
-                    key={index}
-                  >
-                    <ListItem
-                      onPress={() =>
-                        navigation.navigate("UserNav", {
-                          screen: "EditDetails",
-                          params: { userData: user },
-                        })
-                      }
-                      style={{ backgroundColor: "#FAF7EE" }}
-                      title={user.role}
-                      description={user.email}
-                      accessoryLeft={(props) =>
-                        ItemImage(props, user?.profilePic)
-                      }
-                      accessoryRight={(props) => (
-                        <Button
-                          {...props}
-                          appearance="ghost"
-                          status={user.isVerified ? "success" : "danger"}
-                          onPress={() =>
-                            handleModal(user.isVerified, user.email)
-                          }
-                          accessoryLeft={(props) => (
-                            <Icon
-                              {...props}
-                              color={user.isVerified ? "#2ce69b" : "#e62c79"}
-                              name={
-                                user.isVerified
-                                  ? "person-done-outline"
-                                  : "person-delete-outline"
-                              }
-                            />
-                          )}
-                        />
-                      )}
-                    />
-                  </MenuGroup>
-                );
-              })
-          ) : (
-            <></>
-          )}
-        </Menu>
-      </View>
+          <Text>Loading....</Text>
+        </View>
+      ) : (
+        <ScrollView style={{ flex: 1 }}>
+          <Menu
+            selectedIndex={selectedIndex}
+            onSelect={(index) => setSelectedIndex(index)}
+          >
+            {userList && userList.length > 0 ? (
+              userList
+                .sort(function (a, b) {
+                  if (a.fname < b.fname) {
+                    return -1;
+                  }
+                  if (a.fname > b.fname) {
+                    return 1;
+                  }
+                  return 0;
+                })
+                .map((user, index) => {
+                  return (
+                    <MenuGroup
+                      title={user.fname + " " + user.lname}
+                      accessoryLeft={UserIcon}
+                      key={index}
+                    >
+                      <ListItem
+                        onPress={() =>
+                          navigation.navigate("UserNav", {
+                            screen: "EditDetails",
+                            params: { userData: user },
+                          })
+                        }
+                        style={{ backgroundColor: "#FAF7EE" }}
+                        title={user.role}
+                        description={user.email}
+                        accessoryLeft={(props) =>
+                          ItemImage(props, user?.profilePic)
+                        }
+                        accessoryRight={(props) => (
+                          <Button
+                            {...props}
+                            appearance="ghost"
+                            status={user.isVerified ? "success" : "danger"}
+                            onPress={() =>
+                              handleModal(user.isVerified, user.email)
+                            }
+                            accessoryLeft={(props) => (
+                              <Icon
+                                {...props}
+                                color={user.isVerified ? "#2ce69b" : "#e62c79"}
+                                name={
+                                  user.isVerified
+                                    ? "person-done-outline"
+                                    : "person-delete-outline"
+                                }
+                              />
+                            )}
+                          />
+                        )}
+                      />
+                    </MenuGroup>
+                  );
+                })
+            ) : (
+              <></>
+            )}
+          </Menu>
+        </ScrollView>
+      )}
     </>
   );
 };
@@ -177,4 +206,6 @@ const mapStateToProps = ({ userApi }) => {
   };
 };
 
-export default connect(mapStateToProps, { editUserVarification })(ViewUsers);
+export default connect(mapStateToProps, { editUserVarification, getUsers })(
+  ViewUsers
+);

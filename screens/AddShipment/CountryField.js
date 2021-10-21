@@ -7,12 +7,16 @@ import countries from "./CountryField/countries";
 const filter = (item, query) =>
   item.toLowerCase().includes(query.toLowerCase());
 
-const CountryField = ({ styles, handleChange }) => {
-  const [country, setCountry] = React.useState(null);
+const CountryField = ({ styles, handleChange, countryName = "" }) => {
+  const [country, setCountry] = React.useState({
+    Name: countryName,
+    Code: null,
+  });
   const [data, setData] = React.useState(countries);
 
   const onSelect = (index) => {
     setCountry(data[index]);
+    console.log("countery ", country);
     handleChange("country", data[index].Name);
   };
 

@@ -1,7 +1,7 @@
 import * as SecureStore from "expo-secure-store";
 
 export default async () => ({
-  url: "http://134.255.216.211:5000",
+  url: "http://103.199.227.17:5000", //api.bielfood.com//http://134.255.216.211:8443
   routes: {
     login: "/api/v0.0.1/user/login",
     register: "/api/v0.0.1/user/register",
@@ -26,3 +26,4 @@ export default async () => ({
     },
   },
 });
+//"http://103.199.227.17:5000",

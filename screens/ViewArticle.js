@@ -1,35 +1,32 @@
 import React from "react";
 import { Text, useTheme, Spinner } from "@ui-kitten/components";
-import { StyleSheet, View, ScrollView, TouchableHighlight, Image } from "react-native";
-import { WebView } from 'react-native-webview';
+import { StyleSheet, View, Image } from "react-native";
+import { WebView } from "react-native-webview";
 import moment from "moment";
-
-const featuredImage = require("../assets/featured.jpg");
 
 const ViewArticle = ({ handleHeader, navigation, route }) => {
   const [loader, setLoader] = React.useState(false);
   const { article } = route.params;
-  //   console.log("++++++",route.params)
   const theme = useTheme();
   const styles = StyleSheet.create({
     container: {
       marginHorizontal: 18,
       marginVertical: 15,
-      flex: 1
+      flex: 1,
     },
     featuredContainer: {
-      flex: 1, flexDirection: "row"
+      flex: 1,
+      flexDirection: "row",
     },
 
     featuredImageContainer: {
       borderRadius: 10,
-
     },
     featuredImage: {
       resizeMode: "cover",
       justifyContent: "center",
-      height: "100%", width: "100%"
-
+      height: "100%",
+      width: "100%",
     },
     contentContainer: { flex: 2.5, paddingLeft: 10 },
     featuredText: {
@@ -41,7 +38,7 @@ const ViewArticle = ({ handleHeader, navigation, route }) => {
     featuredTextDesc: {
       color: theme["color-danger-500"],
       fontSize: 12,
-      textAlign: "justify"
+      textAlign: "justify",
     },
 
     newsText: {
@@ -50,9 +47,7 @@ const ViewArticle = ({ handleHeader, navigation, route }) => {
       fontSize: 13,
       color: theme["color-basic-600"],
     },
-
   });
-
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -60,24 +55,34 @@ const ViewArticle = ({ handleHeader, navigation, route }) => {
     });
     return unsubscribe;
   }, [navigation]);
-
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", () => {
+      navigation.navigate("Dashboard");
+    });
+    return unsubscribe;
+  }, [navigation]);
   return (
     <View style={styles.container}>
       <View style={styles.featuredContainer}>
-        <View style={{ flex: 3, backgroundColor: "blue", borderRadius: 11, overflow: "hidden" }}>
+        <View
+          style={{
+            flex: 3,
+            backgroundColor: "blue",
+            borderRadius: 11,
+            overflow: "hidden",
+          }}
+        >
           <Image
             source={{
-              uri: "data:image/jpg;base64," + article.image
+              uri: "data:image/jpg;base64," + article.image,
             }}
             imageStyle={styles.featuredImageContainer}
             style={styles.featuredImage}
           />
         </View>
         <View style={styles.contentContainer}>
-          <View style={{ flex: 2 }} >
-            <Text style={styles.featuredText}>
-              {article.title}
-            </Text>
+          <View style={{ flex: 2 }}>
+            <Text style={styles.featuredText}>{article.title}</Text>
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.featuredTextDesc}>
@@ -88,35 +93,24 @@ const ViewArticle = ({ handleHeader, navigation, route }) => {
             </Text>
           </View>
         </View>
-
       </View>
 
-
       <View style={{ flex: 3, marginTop: 10, paddingBottom: 90 }}>
-        {/* <ScrollView>
-
-        </ScrollView> */}
         <WebView
-          originWhitelist={['*']}
+          originWhitelist={["*"]}
           source={{
             html: `<head>
                     <meta name="viewport" content="width=device-width, initial-scale=1">
                     </head>
                     <body>${article.paragraph}</body>
-                   </html>`
+                   </html>`,
           }}
           // source={{ html: item.paragraph,headers:' <meta name="viewport" content="width=device-width, initial-scale=1">' }}
           style={styles.newsText}
-
         />
       </View>
-
     </View>
   );
 };
 
-
-
-export default ViewArticle
-
-
+export default ViewArticle;

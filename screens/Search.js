@@ -11,6 +11,7 @@ const Search = ({
   getAllShipments,
   navigation,
   handleHeader,
+  clients,
 }) => {
   const theme = useTheme();
   const [searchKeyword, setsearchKeyword] = React.useState("");
@@ -85,11 +86,27 @@ const Search = ({
             if (index === 0) {
               return (
                 <>
-                  <ShipmentEntry shipment={item} navigation={navigation} />
+                  <ShipmentEntry
+                    shipment={item}
+                    navigation={navigation}
+                    clientData={
+                      clients &&
+                      clients.find((client) => item.client === client.email)
+                    }
+                  />
                 </>
               );
             }
-            return <ShipmentEntry shipment={item} navigation={navigation} />;
+            return (
+              <ShipmentEntry
+                shipment={item}
+                navigation={navigation}
+                clientData={
+                  clients &&
+                  clients.find((client) => item.client === client.email)
+                }
+              />
+            );
           }}
           keyExtractor={(item) => item.pi}
           ListFooterComponent={footer}
@@ -114,6 +131,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     shipmentList: state.shipmentApi,
+    clients: state.userApi,
   };
 };
 

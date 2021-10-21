@@ -2,11 +2,14 @@ import * as React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Login from "../../screens/Login";
 import ChangePassword from "../../screens/ChangePassword";
-// import EditUserDetails from "../../screens/EditUserDetails";
+import MainNavigator from "../drawer/MainNavigation";
+import { UserContext } from "../../App";
 
 const Stack = createStackNavigator();
 
 function AuthNavigation() {
+  console.log("i am called");
+  const { activeUser } = React.useContext(UserContext);
   return (
     <>
       <Stack.Navigator
@@ -17,7 +20,7 @@ function AuthNavigation() {
       >
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="ChangePass" component={ChangePassword} />
-        {/* <Stack.Screen name="EditDetails" component={EditUserDetails} /> */}
+        <Stack.Screen name="Main" component={MainNavigator} />
       </Stack.Navigator>
     </>
   );

@@ -8,7 +8,7 @@ import { documentDispatchStatusUpdate } from "../../../api/shipment/shipmentActi
 import design from "../common/design";
 import Slider from "../../../common/components/Slider";
 import Footer from "../common/Footer";
-import ConfirmPopUp from "../common/ConfirmPopUp";
+// import ConfirmPopUp from "../common/ConfirmPopUp";
 import DocumentDispatchStatusForm from "./6_DocumentDispatchStatus/DocumentDispatchStatusForm";
 
 const DocumentDispatchStatus = ({
@@ -16,17 +16,19 @@ const DocumentDispatchStatus = ({
   route,
   navigation,
   handleHeader,
+  shipmentList,
 }) => {
   const { pi } = route.params;
 
   const initialShipment = () => ({
     pi,
+    dhl: "",
     telex: false,
     toBuyer: false,
     toBank: false,
   });
 
-  const [warning, setWarning] = React.useState(false);
+  // const [warning, setWarning] = React.useState(false);
   const [shipment, setShipment] = React.useState(initialShipment());
   const [loader, setLoader] = React.useState(false);
   const [error, setError] = React.useState(false);
@@ -37,8 +39,8 @@ const DocumentDispatchStatus = ({
   const styles = design(insets, theme);
 
   const handleBack = () => {
-    setWarning(false);
-    navigation.navigate("Dashboard");
+    // setWarning(false);
+    navigation.navigate("Shipment", { pi });
   };
 
   const handleSubmit = (shipment) => {
@@ -53,7 +55,9 @@ const DocumentDispatchStatus = ({
 
         navigation.navigate("Shipment", { pi });
       } else {
-        setError("Server Error");
+        setError(
+          "Server is not able to process this request. Please try again !!"
+        );
       }
     });
   };
@@ -68,14 +72,47 @@ const DocumentDispatchStatus = ({
     });
   }, []);
 
+  React.useEffect(() => {
+    setProgress(true);
+    const filteredShipment =
+      shipmentList &&
+      shipmentList.filter((shipmentObj) => shipmentObj.pi == pi);
+    // console.log("ship ", filteredShipment);
+    if (filteredShipment.length > 0) {
+      const documentDispatch = filteredShipment[0]?.documentDispatchStatus;
+      documentDispatch &&
+        setShipment({
+          telex: documentDispatch.telex,
+          toBuyer: documentDispatch.toBuyer,
+          toBank: documentDispatch.toBank,
+          // dhl: documentDispatch?.dhl,
+          pi: documentDispatch.pi,
+          id: documentDispatch._id,
+        });
+      setProgress(false);
+    } else {
+      setProgress(false);
+    }
+
+    return function cleanup() {
+      setShipment(initialShipment());
+    };
+  }, [shipmentList, pi]);
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", () => {
+      navigation.navigate("Shipment", { pi });
+    });
+    return unsubscribe;
+  }, [navigation]);
   return (
     <>
-      <ConfirmPopUp
+      {/* <ConfirmPopUp
         styles={styles}
         warning={warning}
         setWarning={setWarning}
         handleBack={handleBack}
-      />
+      /> */}
 
       <Card
         disabled={true}
@@ -83,7 +120,7 @@ const DocumentDispatchStatus = ({
         footer={() => (
           <Footer
             styles={styles}
-            setWarning={setWarning}
+            handleBack={handleBack}
             handleSubmit={handleSubmit}
             shipment={shipment}
             error={error}
@@ -107,6 +144,12 @@ const DocumentDispatchStatus = ({
   );
 };
 
-export default connect(null, { documentDispatchStatusUpdate })(
+const mapStateToProps = ({ shipmentApi, userApi }) => {
+  return {
+    shipmentList: shipmentApi,
+    userList: userApi,
+  };
+};
+export default connect(mapStateToProps, { documentDispatchStatusUpdate })(
   DocumentDispatchStatus
 );

@@ -6,7 +6,7 @@ import Error from "./Error";
 
 const Footer = ({
   styles,
-  setWarning,
+  handleBack,
   handleSubmit,
   shipment,
   page,
@@ -28,7 +28,7 @@ const Footer = ({
           size="large"
           appearance="ghost"
           status="basic"
-          onPress={() => setWarning(true)}
+          onPress={() => handleBack()}
           accessoryLeft={LeftIcon}
         >
           Back

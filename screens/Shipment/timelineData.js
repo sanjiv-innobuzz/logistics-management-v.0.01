@@ -3,9 +3,16 @@ import React from "react";
 import { View } from "react-native";
 import { Text } from "@ui-kitten/components";
 
-const timelineData = (shipment, styles, theme) => {
-  const { date, quantity, rate, stage } = shipment;
+const timelineData = (shipment, styles, theme, navigation) => {
+  const { date, quantity, rate, stage, pi } = shipment;
   const timelineData = [];
+
+  // console.log("timeline shi+++++++++++++++++++++++++ ", shipment);
+  // 1. shipment details
+  // - PI no. Destination and client name
+  // 2. Packing material
+  // -selected option should come
+  // 3. delivery Schedule form
 
   const timelineComponent = (title, descp, iconName, date) => ({
     title: ({ styles }) => (
@@ -38,7 +45,7 @@ const timelineData = (shipment, styles, theme) => {
         timelineData.push(
           timelineComponent(
             "Shipment Created",
-            `total ${quantity} units ordered @ $${rate}`,
+            `shipment PI  ${pi}`,
             "qrcode",
             date,
             styles
@@ -47,10 +54,21 @@ const timelineData = (shipment, styles, theme) => {
         break;
 
       case 1:
+        const {
+          artWorkApproved = false,
+          artWorkUnderApproval = false,
+          packagingMatrialReceived = false,
+          underPrinting = false,
+        } = shipment?.packagingMatrialStatus;
+        // console.log("ship 0=======================", shipment);
         timelineData.push(
           timelineComponent(
             "PACKAGING MATERIAL STATUS",
-            `Doces included are List, the, documents, here`,
+
+            `${artWorkUnderApproval ? "Art Work Under Approval" : ""}
+${artWorkApproved ? "Art Work Approved" : ""}
+${underPrinting ? "Art Work Under Printing" : ""}
+${packagingMatrialReceived ? "Packaging Matrial Recived" : ""}`,
             "pencil-square-o",
             date,
             styles
@@ -59,10 +77,17 @@ const timelineData = (shipment, styles, theme) => {
         break;
 
       case 2:
+        const { dateScheduled, packsize, scheduleUpdate, quantity } =
+          shipment?.scheduleUpdate;
+
         timelineData.push(
           timelineComponent(
             "SCHEDULE",
-            `Design name will be displayed here`,
+            `schedule at ${moment(dateScheduled).format("lll")}
+quntity ${quantity} with pack size ${packsize}
+updated by ${scheduleUpdate}
+                        `,
+            // "work in progress",
             "object-ungroup",
             date,
             styles
@@ -71,15 +96,14 @@ const timelineData = (shipment, styles, theme) => {
         break;
 
       case 3:
-        // let { designApproved } = shipment;
-        // const { finalApproval } =
-        //   typeof designApproved !== "undefined"
-        //     ? designApproved
-        //     : (designApproved = false);
+        const { dispatchSchedule, productionSchedule } =
+          shipment?.productionSchedule;
         timelineData.push(
           timelineComponent(
             `PRODUCTION AND DISPATCH SCHEDULE`,
-            `Comments will appear here`,
+            `dispatch schedule at ${moment(dispatchSchedule).format("lll")}
+production schedule at ${moment(productionSchedule).format("lll")}`,
+
             "object-group",
             date,
             styles
@@ -88,10 +112,16 @@ const timelineData = (shipment, styles, theme) => {
         break;
 
       case 4:
+        const { documentApproved, documentIssued, underApproval } =
+          shipment?.documentStatus;
         timelineData.push(
           timelineComponent(
             `DOCUMENT STATUS`,
-            `$234`,
+            `${underApproval ? "Under Approval" : ""}
+${documentApproved ? "Document Approved" : ""}
+${documentIssued ? "Document Issued" : ""}
+            `,
+
             "dollar",
             date,
             styles
@@ -100,10 +130,15 @@ const timelineData = (shipment, styles, theme) => {
         break;
 
       case 5:
+        const { estArrival, estDeparture, billLandingNo } =
+          shipment?.shipmentSchedule;
         timelineData.push(
           timelineComponent(
             `SHIPMENT SCHEDULE`,
-            "expected to arrive on ${date}",
+            `arrival at ${moment(estArrival).format("lll")}
+departure at ${moment(estDeparture).format("lll")}
+bill landing no. ${billLandingNo}`,
+            // "work in progress",0
             "cubes",
             date,
             styles
@@ -112,10 +147,19 @@ const timelineData = (shipment, styles, theme) => {
         break;
 
       case 6:
+        const {
+          telex,
+          toBank,
+          toBuyer,
+          dhl = "",
+        } = shipment?.documentDispatchStatus;
         timelineData.push(
           timelineComponent(
             `DOCUMENTS DISPATCH STATUS`,
-            "arrive on ${date}",
+            `${telex ? "Art Work Under Approval" : ""}
+${toBank ? "To Bank " : toBuyer ? "To Buyer " : ""}
+DHL No.${dhl}`,
+
             "cube",
             date,
             styles

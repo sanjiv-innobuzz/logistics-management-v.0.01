@@ -32,7 +32,15 @@ const ShipmentCard = ({ shipmentData, styles, navigation }) => {
   return (
     <>
       <Text category="h5">Shipment</Text>
-      <TouchableOpacity style={styles.shipmentContainer}>
+      <TouchableOpacity
+        style={styles.shipmentContainer}
+        onPress={() =>
+          navigation.navigate("ShipmentNav", {
+            screen: "OrderDetails",
+            params: { shipmentData },
+          })
+        }
+      >
         <View style={styles.shipmentRow}>
           <Text status="control">
             {moment(shipmentData && shipmentData.date).format("MMM Do YYYY")}

@@ -30,7 +30,7 @@ const MainNavigator = ({ isAuth }) => {
   return (
     <SafeAreaProvider>
       <Drawer.Navigator
-        initialRouteName={isAuth ? "Menu" : "AuthNav"}
+        initialRouteName="Menu"
         drawerContent={(props) => (
           <DrawerMenu
             {...props}

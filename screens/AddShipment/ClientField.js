@@ -14,7 +14,14 @@ import { getUsers } from "../../api/user/userActions";
 const filter = (item, query) =>
   item.fname.toLowerCase().includes(query.toLowerCase());
 
-const ClientField = ({ navigation, styles, handleChange, users, getUsers }) => {
+const ClientField = ({
+  navigation,
+  styles,
+  handleChange,
+  users = [],
+  getUsers,
+  shipment,
+}) => {
   const [value, setValue] = React.useState(null);
   const [clients, setClients] = React.useState([]);
   const [data, setData] = React.useState([]);
@@ -26,6 +33,7 @@ const ClientField = ({ navigation, styles, handleChange, users, getUsers }) => {
   React.useEffect(() => {
     users && setClients(users.filter((user) => user.role === "Client"));
     users && setData(users.filter((user) => user.role === "Client"));
+    setValue(shipment && shipment?.client);
   }, [users]);
 
   const onSelect = (index) => {
@@ -89,7 +97,7 @@ const ClientField = ({ navigation, styles, handleChange, users, getUsers }) => {
 };
 
 const mapStateToProps = ({ userApi }) => ({
-  users: userApi.clients,
+  users: userApi,
 });
 
 export default connect(mapStateToProps, { getUsers })(ClientField);

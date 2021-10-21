@@ -21,6 +21,7 @@ import {
 import { connect } from "react-redux";
 import { currencyData } from "../../api/shipment/shipmentActions";
 import { logout } from "../../screens/Auth/auth";
+import NetInfo from "@react-native-community/netinfo";
 //change start--
 const Header = ({
   navigation,
@@ -55,6 +56,7 @@ const Header = ({
   });
   const [triggerTime, setTriggerTime] = React.useState(0);
   const [currencyIndex, setCurrencyIndex] = React.useState(1);
+  const [isInternetConnected, setIsInternetConnected] = React.useState(true);
   // const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
   // React.useEffect(() => {
@@ -78,6 +80,39 @@ const Header = ({
       screen: "Login",
     });
   };
+
+  React.useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      console.log("Connection type", state.type);
+      console.log("Is connected?", state.isConnected);
+      setIsInternetConnected(state.isConnected);
+      !state.isConnected
+        ? console.log("You are disconnected with Internet ")
+        : null;
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const internetDisconnectBedge = () => {
+    return (
+      <Card
+        style={{
+          maxWidth: 230,
+          flex: 1,
+          // alignItems: "center",
+          // justifyContent: "center",
+          paddingLeft: 5,
+          backgroundColor: theme["color-danger-800"],
+          borderColor: "transparent",
+          height: 25,
+          // opacity: fadeAnim,
+        }}
+      >
+        <Text>No Internet Connected</Text>
+      </Card>
+    );
+  };
   const renderCurrencyBedge = () => {
     return title == "Dashboard" &&
       currentCurrency &&
@@ -85,7 +120,8 @@ const Header = ({
       !isNaN(currentCurrency.rate) ? (
       <Card
         style={{
-          width: 130,
+          maxWidth: 135,
+          flex: 1,
           // alignItems: "center",
           // justifyContent: "center",
           paddingLeft: 5,
@@ -148,7 +184,9 @@ const Header = ({
     );
   };
   const renderRightActions = () => (
-    <React.Fragment>{renderCurrencyBedge()}</React.Fragment>
+    <React.Fragment>
+      {!isInternetConnected ? internetDisconnectBedge() : renderCurrencyBedge()}
+    </React.Fragment>
   );
 
   // console.log("---curent ", currentCurrency);

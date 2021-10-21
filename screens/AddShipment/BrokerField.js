@@ -12,7 +12,13 @@ import {
 const filter = (item, query) =>
   item.fname.toLowerCase().includes(query.toLowerCase());
 
-const AgentField = ({ navigation, styles, handleChange, users }) => {
+const AgentField = ({
+  navigation,
+  styles,
+  handleChange,
+  users = [],
+  shipment,
+}) => {
   const [value, setValue] = React.useState(null);
   const [clients, setClients] = React.useState([]);
   const [data, setData] = React.useState([]);
@@ -20,6 +26,7 @@ const AgentField = ({ navigation, styles, handleChange, users }) => {
   React.useEffect(() => {
     users && setClients(users.filter((user) => user.role === "Broker"));
     users && setData(users.filter((user) => user.role === "Broker"));
+    setValue(shipment && shipment?.broker);
   }, [users]);
 
   const onSelect = (index) => {
@@ -83,7 +90,7 @@ const AgentField = ({ navigation, styles, handleChange, users }) => {
 };
 
 const mapStateToProps = ({ userApi }) => ({
-  users: userApi.clients,
+  users: userApi,
 });
 
 export default connect(mapStateToProps, {})(AgentField);

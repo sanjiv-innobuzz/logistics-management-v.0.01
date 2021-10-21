@@ -26,14 +26,15 @@ const Notifications = ({
 
   React.useEffect(() => {
     setLoader(true);
-    getNotification({ email: "sanjiv@gmail.com" }, (status) => {
+    getNotification({ email: "akjbusiness@gmail.com" }, (status) => {
       setLoader(false);
+      // console.log("noti list ", notificationList);
     });
   }, []);
   const refreshList = () => {
     console.log("refresh called");
     setLoader(true);
-    getNotification({ email: "sanjiv@gmail.com" }, (status) => {
+    getNotification({ email: "akjbusiness@gmail.com" }, (status) => {
       setLoader(false);
     });
   };

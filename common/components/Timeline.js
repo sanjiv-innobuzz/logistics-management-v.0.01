@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import _isEmpty from "lodash.isempty";
 
@@ -125,6 +125,9 @@ const Timeline = ({
   TimelineFooter,
   TimelineHeader,
   touchable,
+  navigation,
+  pi,
+  role,
   ...rest
 }) => {
   // const events = (
@@ -166,6 +169,17 @@ const Timeline = ({
   //   {...rest}
   // />
   // );
+
+  const stage = {
+    0: "AddShipment",
+    1: "PackagingMatrialStatus",
+    2: "Schedule",
+    3: "ProductionSchedule",
+    4: "DocumentStatus",
+    5: "ShipmentSchedule",
+    6: "DocumentDispatchStatus",
+  };
+
   const events = data.map((item, index) => {
     const RowRender = () => (
       <Row
@@ -183,7 +197,23 @@ const Timeline = ({
     );
 
     return touchable ? (
-      <TouchableOpacity key={index}>
+      <TouchableOpacity
+        key={index}
+        onPress={() => {
+          // console.log(pi, "--", index);
+          index >= 0 && role == "Admin"
+            ? navigation.navigate("ShipmentNav", {
+                screen: stage[index],
+                params: { pi },
+              })
+            : index == 2
+            ? navigation.navigate("ShipmentNav", {
+                screen: stage[index],
+                params: { pi },
+              })
+            : "";
+        }}
+      >
         <RowRender />
       </TouchableOpacity>
     ) : (

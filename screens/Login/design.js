@@ -6,8 +6,11 @@ const design = (insets, theme) =>
       flex: 1,
       marginTop: StatusBar.currentHeight,
       paddingHorizontal: 60,
+      // justifyContent: "center",
       justifyContent: "flex-end",
       backgroundColor: "transparent",
+      // paddingTop: 200,
+      // alignItems: "center",
     },
     mainBg: {
       flex: 1,
@@ -15,6 +18,13 @@ const design = (insets, theme) =>
     username: {
       marginVertical: 10,
       borderRadius: 40,
+    },
+    errorMsg: {
+      marginLeft: 10,
+      fontSize: 14,
+      paddingTop: 0,
+      marginTop: -5,
+      color: "red",
     },
     usernameTextStyle: {
       height: 40,
@@ -28,7 +38,7 @@ const design = (insets, theme) =>
     },
     loginBtn: {
       height: 50,
-      marginTop: 10,
+      // marginTop: 10,
       borderRadius: 40,
     },
     signupTxt: {
@@ -36,6 +46,7 @@ const design = (insets, theme) =>
       borderRadius: 40,
       height: 50,
       marginBottom: Platform.OS === "ios" ? insets.bottom + 60 : 80,
+      // marginBottom: Platform.OS === "ios" ? insets.bottom + 60 : 80,
     },
   });
 

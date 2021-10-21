@@ -1,13 +1,5 @@
-import {
-  Input,
-  Toggle,
-  Autocomplete,
-  AutocompleteItem,
-  Button,
-  Card,
-  useTheme,
-} from "@ui-kitten/components";
-import React from "react";
+import { Card, useTheme } from "@ui-kitten/components";
+import React, { useContext } from "react";
 import { ScrollView } from "react-native";
 import { getCurrentUser, editUserDetails } from "../api/user/userActions";
 import { connect } from "react-redux";
@@ -19,7 +11,7 @@ import Footer from "./AddClient/Footer";
 import ConfirmPopUp from "./AddClient/ConfirmPopUp";
 // import EditUserDetailsForm from "./EditUserDetails/EditUserDetailsForm";
 import ClientForm from "./AddClient/ClientForm";
-
+import { UserContext } from "../App";
 // const roles = [
 //   { title: "Admin" },
 //   { title: "Client" },
@@ -137,6 +129,7 @@ function EditUserDetails({
   const [warning, setWarning] = React.useState(false);
   const [client, setClient] = React.useState(initialData);
 
+  const { getActiveUser } = useContext(UserContext);
   const insets = useSafeAreaInsets();
   const theme = useTheme();
   const styles = design(insets, theme);
@@ -148,18 +141,23 @@ function EditUserDetails({
 
   const handleSubmit = (client) => {
     // console.log(client);
-    if(!client?.password?.length>7)delete client["password"]
+    if (!client?.password?.length > 7) delete client["password"];
     editUserDetails(client, (status) => {
       if (status) {
-        navigation.navigate("UserNav", {
-          screen: "ViewUsers",
-        });
+        if (userData) {
+          navigation.navigate("UserNav", {
+            screen: "ViewUsers",
+            params: { userUpdated: true },
+          });
+        } else {
+          navigation.navigate("Dashboard");
+          getActiveUser();
+        }
       }
     });
   };
 
   const handleChange = (updateClient) => {
-
     setClient(updateClient);
   };
 
@@ -190,7 +188,12 @@ function EditUserDetails({
 
   //   return () => ac.abort();
   // }, []);
-
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", () => {
+      navigation.navigate("Dashboard");
+    });
+    return unsubscribe;
+  }, [navigation]);
   const currentUser = () => {
     getCurrentUser({}, (currentUser) => {
       setClient({

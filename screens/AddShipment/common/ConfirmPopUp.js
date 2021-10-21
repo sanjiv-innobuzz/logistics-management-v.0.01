@@ -3,7 +3,7 @@ import { Button, Card, Modal, Text, Layout } from "@ui-kitten/components";
 
 const ConfirmPopUp = ({ styles, warning, setWarning, handleBack }) => (
   <Modal
-    visible={warning}
+    visible={false}
     backdropStyle={styles.backdrop}
     style={styles.warningContainer}
     onBackdropPress={() => setWarning(false)}

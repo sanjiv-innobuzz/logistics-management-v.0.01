@@ -4,15 +4,17 @@ import { connect } from "react-redux";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Card, useTheme } from "@ui-kitten/components";
 
-import { register } from "../api/user/userActions";
+import { register, getUsers } from "../api/user/userActions";
 import design from "./AddClient/design";
 import Slider from "../common/components/Slider";
 import Footer from "./AddClient/Footer";
 import ConfirmPopUp from "./AddClient/ConfirmPopUp";
 import ClientForm from "./AddClient/ClientForm";
 
-const AddClient = ({ register, navigation }) => {
+const AddClient = ({ register, navigation, getUsers }) => {
   const [warning, setWarning] = React.useState(false);
+
+  const [loader, setLoader] = React.useState(false);
   const [client, setClient] = React.useState({
     name: "",
     email: "",
@@ -33,8 +35,18 @@ const AddClient = ({ register, navigation }) => {
   };
 
   const handleSubmit = (client) => {
-    register(client, true);
-    navigation.navigate("AddShipment");
+    setLoader(true);
+    console.log("i calll-------------------");
+    register(client, (status) => {
+      if (status) {
+        getUsers({}, (status) => {
+          console.log("user call", status);
+        });
+        setLoader(false);
+        navigation.navigate("AddShipment");
+      }
+      console.log("i calll--------+++-----------", status);
+    });
   };
 
   const handleChange = (updateClient) => {
@@ -58,6 +70,7 @@ const AddClient = ({ register, navigation }) => {
             setWarning={setWarning}
             handleSubmit={handleSubmit}
             client={client}
+            loader={loader}
           />
         )}
       >
@@ -67,6 +80,7 @@ const AddClient = ({ register, navigation }) => {
             styles={styles}
             handleChange={handleChange}
             client={client}
+            editUser={false}
           />
         </ScrollView>
       </Card>
@@ -74,4 +88,4 @@ const AddClient = ({ register, navigation }) => {
   );
 };
 
-export default connect(null, { register })(AddClient);
+export default connect(null, { register, getUsers })(AddClient);

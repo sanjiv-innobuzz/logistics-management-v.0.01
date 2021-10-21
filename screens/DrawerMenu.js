@@ -11,12 +11,15 @@ import {
 } from "@ui-kitten/components";
 import { View, SafeAreaView } from "react-native";
 import { connect } from "react-redux"; //
-import { CommonActions, StackActions } from "@react-navigation/native";
-import { useIsDrawerOpen } from "@react-navigation/drawer";
+import { CommonActions } from "@react-navigation/native";
+import {
+  DrawerContentScrollView,
+  useIsDrawerOpen,
+} from "@react-navigation/drawer";
 
 import { getCurrentUser, logout } from "../api/user/userActions"; //
 import design from "./DrawerMenu/design";
-
+import { UserContext } from "../App";
 const useToggleState = (initialState = false) => {
   const [checked, setChecked] = React.useState(initialState);
 
@@ -27,40 +30,21 @@ const useToggleState = (initialState = false) => {
   return { checked, onChange: onCheckedChange };
 };
 
-const DrawerMenu = ({ navigation, getCurrentUser, logout }) => {
+const DrawerMenu = ({ navigation, logout }) => {
   const [selectedIndex, setSelectedIndex] = React.useState(null);
   const theme = useTheme();
   const styles = design(theme);
   const primaryToggleState = useToggleState();
-  const [isRoleChecked, setIsRoleChecked] = React.useState(false);
-  // const isFocused = useIsFocused();
-  const [isAdmin, setIsAdmin] = React.useState(false);
-  const [activeUser, setActiveUser] = React.useState(null);
-  const isDrawerOpen = useIsDrawerOpen();
+  const { isAdminX, activeUser } = React.useContext(UserContext);
+  const [isAdmin, setIsAdmin] = React.useState(isAdminX);
 
-  const checkAdmin = () => {
-    getCurrentUser({}, (currentUser) => {
-      setIsAdmin(currentUser && currentUser.user.role == "Admin");
-      // console.log(isAdmin, "user--");
-      setActiveUser(currentUser && currentUser.user);
-      setIsRoleChecked(true);
-    });
-    return () => setActiveUser(null);
-  };
-
-  !isRoleChecked && isDrawerOpen ? checkAdmin() : console.log("role checked");
-  // React.useEffect(() => {
-  //   // console.log(isDrawerOpen, "i am run drawer ", navigation);
-  // getCurrentUser({}, (currentUser) => {
-  //   setIsAdmin(currentUser && currentUser.user.role == "Admin");
-  //   // console.log(isAdmin, "user--");
-  //   setIsRoleChecked(true);
-  // });
-  // }, []);
+  React.useEffect(() => {
+    setIsAdmin(isAdminX);
+  }, [isAdminX]);
 
   const HomeIcon = (props) => <Icon {...props} name="home" />;
   const PersonIcon = (props) => <Icon {...props} name="person" />;
-  const LinkIcon = (props) => <Icon {...props} name="link" />;
+
   const EditIcon = (props) => <Icon {...props} name="edit-2" />;
   const ShieldIcon = (props) => <Icon {...props} name="shield" />;
   const SettingsIcon = (props) => <Icon {...props} name="settings" />;
@@ -70,8 +54,7 @@ const DrawerMenu = ({ navigation, getCurrentUser, logout }) => {
   const PeopleIcon = (props) => <Icon {...props} name="people" />;
   const FolderIcon = (props) => <Icon {...props} name="folder" />;
   const TvIcon = (props) => <Icon {...props} name="tv" />;
-  const PersonDoneIcon = (props) => <Icon {...props} name="person-done" />;
-  const LockIcon = (props) => <Icon {...props} name="lock" />;
+
   const PlusCircle = (props) => <Icon {...props} name="plus-circle" />;
   const LogoutIcon = (props) => <Icon {...props} name="log-out" />;
   const ToggleIcon = () => (
@@ -111,6 +94,7 @@ const DrawerMenu = ({ navigation, getCurrentUser, logout }) => {
               style={styles.drawerGroup}
               title="Dashboard"
               accessoryLeft={HomeIcon}
+              onPress={() => navigation.navigate("Dashboard")}
             />
 
             <DrawerItem
@@ -180,6 +164,7 @@ const DrawerMenu = ({ navigation, getCurrentUser, logout }) => {
                     onPress={() =>
                       navigation.navigate("UserNav", {
                         screen: "ViewUsers",
+                        params: { userUpdated: false },
                       })
                     }
                   />
@@ -199,7 +184,7 @@ const DrawerMenu = ({ navigation, getCurrentUser, logout }) => {
                         })
                       }
                     />
-                    <DrawerItem title="Edit Article" accessoryLeft={EditIcon} />
+                    {/* <DrawerItem title="Edit Article" accessoryLeft={EditIcon} /> */}
                   </DrawerGroup>
                 </>
               ) : (
@@ -217,9 +202,6 @@ const DrawerMenu = ({ navigation, getCurrentUser, logout }) => {
             onPress={() => {
               logout((status) => {
                 if (status) {
-                  // navigation.navigate("AuthNav");
-                  // navigation.reset();
-                  setIsRoleChecked(false);
                   navigation.dispatch(
                     CommonActions.reset({
                       key: null,
@@ -231,7 +213,6 @@ const DrawerMenu = ({ navigation, getCurrentUser, logout }) => {
                   // navigation.dispatch(CommonActions.reset());
                 }
               });
-              // console.log("nav", navigation);
             }}
           />
         </Drawer>

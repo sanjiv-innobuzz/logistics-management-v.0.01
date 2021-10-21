@@ -8,12 +8,13 @@ import { productionScheduleUpdate } from "../../../api/shipment/shipmentActions"
 import design from "../common/design";
 import Slider from "../../../common/components/Slider";
 import Footer from "../common/Footer";
-import ConfirmPopUp from "../common/ConfirmPopUp";
+// import ConfirmPopUp from "../common/ConfirmPopUp";
 
 const ProductionSchedule = ({
   productionScheduleUpdate,
   route,
   navigation,
+  shipmentList,
   handleHeader,
 }) => {
   const { pi } = route.params;
@@ -24,19 +25,19 @@ const ProductionSchedule = ({
     pi,
   });
 
-  const [warning, setWarning] = React.useState(false);
+  // const [warning, setWarning] = React.useState(false);
   const [shipment, setShipment] = React.useState(initialShipment());
   const [loader, setLoader] = React.useState(false);
   const [error, setError] = React.useState(false);
-  const [progress, setProgress] = React.useState({});
+  // const [progress, setProgress] = React.useState({});
 
   const insets = useSafeAreaInsets();
   const theme = useTheme();
   const styles = design(insets, theme);
 
   const handleBack = () => {
-    setWarning(false);
-    navigation.navigate("Dashboard");
+    // setWarning(false);
+    navigation.navigate("Shipment", { pi });
   };
 
   const handleSubmit = (shipment) => {
@@ -48,10 +49,11 @@ const ProductionSchedule = ({
       if (uploadedData) {
         //should be sent true
         setShipment(initialShipment);
-        setProgress({});
         navigation.navigate("Shipment", { pi });
       } else {
-        setError("Server Error");
+        setError(
+          "Server is not able to process this request. Please try again !!"
+        );
       }
     });
   };
@@ -66,14 +68,40 @@ const ProductionSchedule = ({
     });
   }, []);
 
+  React.useEffect(() => {
+    const filteredShipment =
+      shipmentList &&
+      shipmentList.filter((shipmentObj) => shipmentObj.pi == pi);
+    // console.log("ship ", filteredShipment);
+    if (filteredShipment.length > 0) {
+      const productionScheduleObj = filteredShipment[0]?.productionSchedule;
+      productionScheduleObj &&
+        setShipment({
+          productionSchedule: new Date(
+            productionScheduleObj.productionSchedule
+          ),
+          dispatchSchedule: new Date(productionScheduleObj.dispatchSchedule),
+          pi: productionScheduleObj.pi,
+          id: productionScheduleObj._id,
+        });
+    }
+    return () => setShipment(initialShipment);
+  }, [pi]);
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", () => {
+      navigation.navigate("Shipment", { pi });
+    });
+    return unsubscribe;
+  }, [navigation]);
   return (
     <>
-      <ConfirmPopUp
+      {/* <ConfirmPopUp
         styles={styles}
         warning={warning}
         setWarning={setWarning}
         handleBack={handleBack}
-      />
+      /> */}
 
       <Card
         disabled={true}
@@ -81,7 +109,7 @@ const ProductionSchedule = ({
         footer={() => (
           <Footer
             styles={styles}
-            setWarning={setWarning}
+            handleBack={handleBack}
             handleSubmit={handleSubmit}
             shipment={shipment}
             error={error}
@@ -124,4 +152,12 @@ const ProductionSchedule = ({
   );
 };
 
-export default connect(null, { productionScheduleUpdate })(ProductionSchedule);
+const mapStateToProps = ({ shipmentApi, userApi }) => {
+  return {
+    shipmentList: shipmentApi,
+    userList: userApi,
+  };
+};
+export default connect(mapStateToProps, { productionScheduleUpdate })(
+  ProductionSchedule
+);

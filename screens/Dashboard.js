@@ -1,7 +1,14 @@
 import { useTheme, Spinner, Text } from "@ui-kitten/components";
 import React from "react";
 import { connect } from "react-redux";
-import { FlatList, StyleSheet, Image, View, Dimensions } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Image,
+  View,
+  Dimensions,
+  RefreshControl,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 import ShipmentEntry from "./Dashboard/ShipmentEntry";
@@ -11,22 +18,24 @@ import {
   getMoreShipments,
 } from "../api/shipment/shipmentActions";
 import { getUsers } from "../api/user/userActions";
+import { UserContext } from "../App";
 
 const Dashboard = ({
   shipmentList,
-  getShipments,
+  getShipments = [],
   navigation,
   handleHeader,
   getUsers,
   clients,
 }) => {
   const theme = useTheme();
-  const [page, setPage] = React.useState(1);
+  const [page, setPage] = React.useState(0);
+  const [refreshing, setRefreshing] = React.useState(false);
   const [loader, setLoader] = React.useState(false);
   const [lowerColor, setLowerColor] = React.useState(
     theme["color-basic-transparent-100"]
   );
-
+  const { isAdminX } = React.useContext(UserContext);
   const styles = StyleSheet.create({
     inactiveContainer: {
       flex: 1,
@@ -61,21 +70,34 @@ const Dashboard = ({
   };
 
   React.useEffect(() => {
-    console.log("run ship");
-    getShipments({ page }, () => {
-      //TODO: need to implement pagination
-      getUsers({ user: "" }, () => {
+    setLoader(true);
+    getShipments({ page: page }, (status) => {
+      if (status) setPage(page + 1);
+      //TODO: need to implement pagination//get user changed v0.0.2
+      getUsers({ user: "" }, (status) => {
         setLoader(false);
-        setPage(page + 1);
+        console.log("user fatched", status);
+        //   setPage(page + 1);
       });
     });
-    setLoader(true);
   }, []);
 
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    getShipments({ page: page }, (status) => {
+      if (status) {
+        setPage(page + 1);
+        setRefreshing(false);
+      }
+
+      setLoader(false);
+    });
+  }, [refreshing]);
+
   React.useEffect(() => {
-    //to change header text
     const unsubscribe = navigation.addListener("focus", () => {
       handleHeader("Dashboard", "");
+      onRefresh();
     });
     return unsubscribe;
   }, [navigation]);
@@ -108,7 +130,7 @@ const Dashboard = ({
                   if (index === 0) {
                     return (
                       <>
-                        <Chart theme={theme} />
+                        {isAdminX ? <Chart theme={theme} /> : <></>}
                         <ShipmentEntry
                           shipment={item}
                           navigation={navigation}
@@ -134,6 +156,12 @@ const Dashboard = ({
                   );
                 }}
                 keyExtractor={(item) => item.pi}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
                 // onEndReachedThreshold={0.01}
                 // onEndReached={() => loadMoreShipment()}
                 // ListFooterComponent={
@@ -155,7 +183,7 @@ const Dashboard = ({
 const mapStateToProps = ({ shipmentApi, userApi }) => {
   return {
     shipmentList: shipmentApi,
-    clients: userApi.clients,
+    clients: userApi,
   };
 };
 

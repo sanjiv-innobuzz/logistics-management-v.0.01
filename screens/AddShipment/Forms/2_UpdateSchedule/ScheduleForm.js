@@ -1,8 +1,8 @@
 import React from "react";
 import { Input, Datepicker, Divider } from "@ui-kitten/components";
-import { BrandField } from "./BrandField";
+// import BrandField from "./BrandField";
 
-const ScheduleForm = ({ styles, handleChange, shipment }) => {
+const ScheduleForm = ({ styles, handleChange, shipment, pi }) => {
   return (
     <>
       <Input
@@ -11,6 +11,8 @@ const ScheduleForm = ({ styles, handleChange, shipment }) => {
         size="medium"
         placeholder="Please mention Quality"
         size="large"
+        disabled={true}
+        value={shipment?.quality}
         multiline={true}
         onChangeText={(quality) => handleChange({ ...shipment, quality })}
       />
@@ -30,6 +32,8 @@ const ScheduleForm = ({ styles, handleChange, shipment }) => {
         size="medium"
         placeholder="Please mention Packing Material"
         size="large"
+        disabled={true}
+        value={shipment?.packingMatrial}
         multiline={true}
         onChangeText={(packingMatrial) =>
           handleChange({ ...shipment, packingMatrial })
@@ -40,18 +44,33 @@ const ScheduleForm = ({ styles, handleChange, shipment }) => {
         style={styles.input}
         label="Pack Size and No."
         size="medium"
+        disabled={true}
         placeholder="Please mention Pack Size and No."
         size="large"
+        value={shipment?.packsize}
         multiline={true}
         onChangeText={(packsize) => handleChange({ ...shipment, packsize })}
       />
 
       <Divider style={styles.divider} />
-      <BrandField
+      <Input
+        style={styles.input}
+        label="Brand"
+        size="medium"
+        disabled={true}
+        placeholder="Please enter brand."
+        size="large"
+        value={shipment?.brand}
+        // multiline={true}
+        onChangeText={(packsize) => handleChange({ ...shipment, brand })}
+      />
+
+      {/* <BrandField
         styles={styles}
         handleChange={handleChange}
         shipment={shipment}
-      />
+        pi={pi}
+      /> */}
       <Input
         style={styles.input}
         label="Quantity"
@@ -60,6 +79,8 @@ const ScheduleForm = ({ styles, handleChange, shipment }) => {
         placeholder="Please mention Quantity"
         size="large"
         multiline={true}
+        disabled={true}
+        value={shipment?.quantity}
         onChangeText={(quantity) => handleChange({ ...shipment, quantity })}
       />
       <Divider style={styles.divider} />
@@ -70,6 +91,7 @@ const ScheduleForm = ({ styles, handleChange, shipment }) => {
         placeholder="Please mention Destination Port"
         size="large"
         multiline={true}
+        value={shipment?.destinationPort}
         onChangeText={(destinationPort) =>
           handleChange({ ...shipment, destinationPort })
         }

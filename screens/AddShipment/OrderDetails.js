@@ -2,6 +2,7 @@ import React from "react";
 import { Layout, Input, Text } from "@ui-kitten/components";
 
 const OrderDetails = ({ handleOrder, order, styles, index }) => {
+  // console.log("order come - in ", order);
   return (
     <>
       <Layout style={styles.inputGroup}>
@@ -54,11 +55,12 @@ const OrderDetails = ({ handleOrder, order, styles, index }) => {
             handleOrder("packSize", nextValue, index)
           }
         />
+
         <Input
-          keyboardType="numeric"
+          // keyboardType="numeric"
           style={styles.inputHalf}
           size="large"
-          value={order.quantity}
+          value={order?.quantity.toString()}
           label="Quantity"
           placeholder="quantity..."
           onChangeText={(nextValue) =>

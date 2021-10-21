@@ -6,8 +6,8 @@ import { Avatar, Text, Button, Icon } from "@ui-kitten/components";
 const MiddelMenDetails = ({
   navigation,
   styles,
-  userList = [],
-  shipmentData,
+  users = null,
+  shipmentData = null,
 }) => {
   const [middlemen, setMiddlemen] = React.useState({
     broker: null,
@@ -15,14 +15,14 @@ const MiddelMenDetails = ({
   });
 
   React.useEffect(() => {
-    if (userList != undefined) {
-      userList?.clients.map((user) => {
-        if (user.email == shipmentData.agent) {
+    users &&
+      users.map((user) => {
+        if (user.email == shipmentData?.agent) {
           setMiddlemen((prevData) => ({
             ...prevData,
             agent: user,
           }));
-        } else if (user.email == shipmentData.broker) {
+        } else if (user.email == shipmentData?.broker) {
           //   console.log("coming", user.email == shipmentData.broker);
           setMiddlemen((prevData) => ({
             ...prevData,
@@ -30,11 +30,20 @@ const MiddelMenDetails = ({
           }));
         }
       });
-    }
-  }, [userList]);
+    return () =>
+      setMiddlemen({
+        broker: null,
+        agent: null,
+      });
+  }, [users]);
+
   return (
     <>
-      <Text category="p1">Middle Men</Text>
+      {middlemen.broker || middlemen.agent ? (
+        <Text category="p1">Middle Men</Text>
+      ) : (
+        <></>
+      )}
       <TouchableOpacity
         style={styles.clientContainer}
         //onPress={() => navigation.navigate("Shipment")}
@@ -51,7 +60,7 @@ const MiddelMenDetails = ({
                 {middlemen.broker.fname + middlemen.broker.lname}
               </Text>
               <Text style={{ fontSize: 10 }} category="c2">
-                {middlemen.broker && middlemen.broker.email}
+                {middlemen.broker.email}
               </Text>
             </View>
           </>
@@ -70,7 +79,7 @@ const MiddelMenDetails = ({
                 {middlemen.agent.fname + middlemen.agent.lname}
               </Text>
               <Text style={{ fontSize: 10 }} category="c2">
-                {middlemen.agent && middlemen.agent.email}
+                {middlemen.agent.email}
               </Text>
             </View>
           </>
@@ -82,11 +91,4 @@ const MiddelMenDetails = ({
   );
 };
 
-// export default MiddelMenDetails;
-const mapStateToProps = ({ userApi }) => {
-  return {
-    userList: userApi,
-  };
-};
-
-export default connect(mapStateToProps, null)(MiddelMenDetails);
+export default MiddelMenDetails;

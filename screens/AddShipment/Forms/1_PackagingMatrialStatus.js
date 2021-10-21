@@ -8,13 +8,14 @@ import { packagingMatrialStatus } from "../../../api/shipment/shipmentActions";
 import design from "../common/design";
 import Slider from "../../../common/components/Slider";
 import Footer from "../common/Footer";
-import ConfirmPopUp from "../common/ConfirmPopUp";
+// import ConfirmPopUp from "../common/ConfirmPopUp";
 
 const PackagingMatrialStatus = ({
   packagingMatrialStatus,
   route,
   navigation,
   handleHeader,
+  shipmentList,
 }) => {
   const { pi } = route.params;
   const initialShipment = () => ({
@@ -23,19 +24,20 @@ const PackagingMatrialStatus = ({
     underPrinting: false,
     packagingMatrialReceived: false,
     pi,
+    id: "",
   });
-  const [warning, setWarning] = React.useState(false);
+  // const [warning, setWarning] = React.useState(false);
   const [shipment, setShipment] = React.useState(initialShipment());
   const [loader, setLoader] = React.useState(false);
   const [error, setError] = React.useState(false);
   const [progress, setProgress] = React.useState({});
-
+  // const [update, setUpdate] = React.useState(true);
   const insets = useSafeAreaInsets();
   const theme = useTheme();
   const styles = design(insets, theme);
 
   const handleBack = () => {
-    setWarning(false);
+    // setWarning(false);
     navigation.navigate("Shipment", { pi });
   };
 
@@ -48,9 +50,12 @@ const PackagingMatrialStatus = ({
         //should be sent true
         setShipment(initialShipment);
         setProgress({});
+        // handleUpdate();
         navigation.navigate("Shipment", { pi });
       } else {
-        setError("Server Error");
+        setError(
+          "Server is not able to process this request. Please try again !!"
+        );
       }
     });
   };
@@ -62,25 +67,76 @@ const PackagingMatrialStatus = ({
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       handleHeader("PACKAGING MATERIAL STATUS", ""); //to set header
+      const filteredShipment =
+        shipmentList &&
+        shipmentList.filter((shipmentObj) => shipmentObj.pi == pi);
+      // console.log("ship ", filteredShipment);
+      if (filteredShipment.length > 0) {
+        const packageMatriailObj = filteredShipment[0]?.packagingMatrialStatus;
+        // console.log("packageMatriailObj++++++++++++", packageMatriailObj);
+        if (packageMatriailObj) {
+          setShipment({
+            artWorkUnderApproval: packageMatriailObj?.artWorkUnderApproval,
+            artWorkApproved: packageMatriailObj?.artWorkApproved,
+            underPrinting: packageMatriailObj?.underPrinting,
+            packagingMatrialReceived:
+              packageMatriailObj?.packagingMatrialReceived,
+            pi: packageMatriailObj?.pi,
+            id: packageMatriailObj?._id,
+          });
+        }
+        // console.log(filteredShipment[0], "--", packageMatriailObj);
+      }
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  React.useEffect(() => {
+    const filteredShipment =
+      shipmentList &&
+      shipmentList.filter((shipmentObj) => shipmentObj.pi == pi);
+    // console.log("ship ", filteredShipment);
+    if (filteredShipment.length > 0) {
+      const packageMatriailObj = filteredShipment[0]?.packagingMatrialStatus;
+      // console.log("packageMatriailObj++++++++++++", packageMatriailObj);
+      if (packageMatriailObj) {
+        setShipment({
+          artWorkUnderApproval: packageMatriailObj?.artWorkUnderApproval,
+          artWorkApproved: packageMatriailObj?.artWorkApproved,
+          underPrinting: packageMatriailObj?.underPrinting,
+          packagingMatrialReceived:
+            packageMatriailObj?.packagingMatrialReceived,
+          pi: packageMatriailObj?.pi,
+          id: packageMatriailObj?._id,
+        });
+      }
+      // console.log(filteredShipment[0], "--", packageMatriailObj);
+    }
+    return () => setShipment(initialShipment);
+  }, [pi, shipmentList]);
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", () => {
+      navigation.navigate("Shipment", { pi });
     });
     return unsubscribe;
   }, [navigation]);
 
   return (
     <>
-      <ConfirmPopUp
+      {/* <ConfirmPopUp
         styles={styles}
         warning={warning}
         setWarning={setWarning}
         handleBack={handleBack}
-      />
+      /> */}
       <Card
         disabled={true}
         style={styles.container}
         footer={() => (
           <Footer
             styles={styles}
-            setWarning={setWarning}
+            handleBack={handleBack}
             handleSubmit={handleSubmit}
             shipment={shipment}
             error={error}
@@ -137,7 +193,12 @@ const PackagingMatrialStatus = ({
     </>
   );
 };
-
-export default connect(null, { packagingMatrialStatus })(
+const mapStateToProps = ({ shipmentApi, userApi }) => {
+  return {
+    shipmentList: shipmentApi,
+    userList: userApi,
+  };
+};
+export default connect(mapStateToProps, { packagingMatrialStatus })(
   PackagingMatrialStatus
 );

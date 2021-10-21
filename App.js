@@ -12,7 +12,7 @@ import MainNavigation from "./navigation/drawer/MainNavigation";
 import AuthNavigation from "./navigation/auth/AuthNavigation";
 
 import configureStore from "./api";
-import { isAuthanticate, getCurrentUser } from "./api/user/userActions";
+import { isAuthanticate, getCurrentUserX } from "./api/user/userActions";
 
 import { default as theme } from "./config/theme.json";
 import { default as mapping } from "./config/mapping.json";
@@ -20,7 +20,11 @@ import { default as mapping } from "./config/mapping.json";
 //push nptificarion
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
+import { Alert, ImageBackground, View, Text } from "react-native";
+import NetInfo from "@react-native-community/netinfo";
+import { LogBox } from "react-native";
 import { saveToken } from "./api/notification/notificationAction";
+LogBox.ignoreAllLogs(true);
 
 export const UserContext = React.createContext();
 
@@ -40,23 +44,49 @@ const api = configureStore();
 function App() {
   const [isAuth, setIsAuth] = React.useState(false);
   const [activeUser, setActiveUser] = React.useState(null);
-  const [isAdmin, setIsAdmin] = React.useState(null);
+  const [isAdmin, setIsAdmin] = React.useState(false);
+  const [isInternetConnected, setIsInternetConnected] = React.useState(true);
+  const [loader, setLoader] = React.useState(false);
 
   const [expoPushToken, setExpoPushToken] = React.useState("");
 
   React.useEffect(() => {
+    setLoader(true);
     async function checkAuth() {
       // const token = await getValueFromStore("token");
       // setIsAuth(isAuthanticate(token));
-      await getCurrentUser({}, (userData) => {
-        console.log("current user---- ", userData);
+      await getCurrentUserX({}, (currentUser) => {
+        if (currentUser) {
+          console.log(
+            "username ",
+            currentUser.user.email,
+            currentUser.user.role
+          );
+          setIsAdmin(currentUser && currentUser.user.role == "Admin");
+          setActiveUser(currentUser && currentUser.user);
+        } else {
+          console.log("user auth fail ", currentUser);
+          setLoader(false);
+        }
       });
+
       await isAuthanticate({}, (status) => {
+        console.log("isAuth atatus", status);
         setIsAuth(status);
+        setLoader(false);
       });
     }
     checkAuth();
+    return () => setActiveUser(null);
   }, []);
+
+  const getActiveUser = async () => {
+    console.log("call active user");
+    await getCurrentUserX({}, (currentUser) => {
+      setIsAdmin(currentUser && currentUser.user.role == "Admin");
+      setActiveUser(currentUser && currentUser.user);
+    });
+  };
 
   //push notifications
   React.useEffect(() => {
@@ -90,7 +120,7 @@ function App() {
       alert("Failed to get push token for push notification!");
       return;
     }
-    const token = (await Notifications.getDevicePushTokenAsync()).data; //(await Notifications.getExpoPushTokenAsync()).data;
+    const token = (await Notifications.getDevicePushTokenAsync()).data; //(await Notifications.getExpoPushTokenAsync()).data; // (await Notifications.getDevicePushTokenAsync()).data; //(await Notifications.getExpoPushTokenAsync()).data;
     console.log("wait for token ", token);
     setExpoPushToken(token);
     saveToken({ token }, (status) => {
@@ -109,8 +139,39 @@ function App() {
       >
         <NavigationContainer>
           <StatusBar style="auto" />
-          {/* {!isAuth ? <AuthNavigation /> : <MainNavigation />} */}
-          {isAuth ? <MainNavigation isAuth={isAuth} /> : <></>}
+
+          <UserContext.Provider
+            value={{
+              getActiveUser: getActiveUser,
+              activeUser: activeUser,
+              isAdminX: isAdmin,
+            }}
+          >
+            {
+              // !isInternetConnected ? (
+              //   <ImageBackground
+              //     style={{ flex: 1 }}
+              //     source={require("./assets/inter.png")}
+              //   ></ImageBackground>
+              // ) :
+              loader ? (
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Text>Loading....</Text>
+                </View>
+              ) : isAuth ? (
+                <MainNavigation isAuth={isAuth} />
+              ) : (
+                <AuthNavigation />
+                // <MainNavigation isAuth={isAuth} />
+              )
+            }
+          </UserContext.Provider>
         </NavigationContainer>
       </ApplicationProvider>
     </Provider>

@@ -13,44 +13,50 @@ const stateManager = (state = initialState, action) => {
       return [...shipment];
 
     case "getShipmentDetails":
-      return [
+      let newState = [
         ...state.map((shipmentObj) => {
           return shipmentObj.pi === shipment.pi ? shipment : shipmentObj;
         }),
       ];
-
+      state = newState;
+      return state;
     case "packagingMatrialStatus":
-      return [
+      newState = [
         ...state.map((shipmentObj) => {
           return shipmentObj.pi === shipment.pi
             ? { ...shipmentObj, packagingMatrialStatus: shipment, stage: 1 }
             : shipmentObj;
         }),
       ];
+      state = newState;
+      return state;
 
     case "scheduleUpdate":
-      return [
+      newState = [
         ...state.map((shipmentObj) => {
           return shipmentObj.pi === shipment.pi
             ? { ...shipmentObj, scheduleUpdate: shipment, stage: 2 }
             : shipmentObj;
         }),
       ];
+      state = newState;
+      return state;
 
     case "productionScheduleUpdate":
-      return [
+      newState = [
         ...state.map((shipmentObj) => {
           return shipmentObj.pi === shipment.pi
-            ? { ...shipmentObj, productionScheduleUpdate: shipment, stage: 3 }
+            ? { ...shipmentObj, productionSchedule: shipment, stage: 3 }
             : shipmentObj;
         }),
       ];
-
+      state = newState;
+      return state;
     case "documentStatusUpdate":
       return [
         ...state.map((shipmentObj) => {
           return shipmentObj.pi === shipment.pi
-            ? { ...shipmentObj, documentStatusUpdate: shipment, stage: 4 }
+            ? { ...shipmentObj, documentStatus: shipment, stage: 4 }
             : shipmentObj;
         }),
       ];
@@ -59,7 +65,7 @@ const stateManager = (state = initialState, action) => {
       return [
         ...state.map((shipmentObj) => {
           return shipmentObj.pi === shipment.pi
-            ? { ...shipmentObj, shipmentScheduleUpdate: shipment, stage: 5 }
+            ? { ...shipmentObj, shipmentSchedule: shipment, stage: 5 }
             : shipmentObj;
         }),
       ];
@@ -70,7 +76,7 @@ const stateManager = (state = initialState, action) => {
           return shipmentObj.pi === shipment.pi
             ? {
                 ...shipmentObj,
-                documentDispatchStatusUpdate: shipment,
+                documentDispatchStatus: shipment,
                 stage: 6,
               }
             : shipmentObj;

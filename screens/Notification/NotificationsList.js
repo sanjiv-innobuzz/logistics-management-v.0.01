@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ScrollView, FlatList } from "react-native";
+import { View, ScrollView, FlatList, RefreshControl } from "react-native";
 import NotificationCard from "./NotificationCard";
 
 const NotificationsList = ({ styles, data, refreshList }) => {
@@ -33,6 +33,9 @@ const NotificationsList = ({ styles, data, refreshList }) => {
           }}
           keyExtractor={(item) => item._id}
           refreshing={false}
+          // refreshControl={
+          //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          // }
           onRefresh={() => {
             console.log("i am refresed");
             refreshList();

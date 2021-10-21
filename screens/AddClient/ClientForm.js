@@ -12,10 +12,14 @@ import {
 
 import extCodes from "./extCodes";
 import SingalImageUpload from "../EditUserDetails/SingalImageUpload";
+import { UserContext } from "../../App";
 
 const ClientForm = ({ styles, handleChange, client, editUser = false }) => {
   const roles = ["Agent", "Broker", "Client", "Admin"];
+  const [flag, setFlag] = React.useState(0);
+  const [role, setRole] = React.useState("Admin");
   const [country, setCountry] = React.useState(null);
+  const { isAdminX } = React.useContext(UserContext);
   const [filteredCountries, setFilteredCountries] = React.useState(extCodes);
 
   const [roleIndex, setRoleIndex] = React.useState(roles.indexOf(client.role));
@@ -26,6 +30,10 @@ const ClientForm = ({ styles, handleChange, client, editUser = false }) => {
 
   React.useEffect(() => {
     setRoleIndex(roles.indexOf(client.role));
+    if (flag < 3) {
+      setRole(client.role);
+      setFlag(flag + 1);
+    }
   }, [client]);
 
   const filter = (item, query) => item.includes(query);
@@ -112,13 +120,13 @@ const ClientForm = ({ styles, handleChange, client, editUser = false }) => {
         <RadioGroup
           style={styles.inputGroupRadio}
           selectedIndex={roleIndex}
-          // disabled={editUser}
+          disabled={!isAdminX}
           onChange={(index) => setRoleIndex(index)}
         >
-          <Radio>Agent</Radio>
-          <Radio>Broker</Radio>
-          <Radio>Client</Radio>
-          <Radio>Admin</Radio>
+          <Radio disabled={!isAdminX}>Agent</Radio>
+          <Radio disabled={!isAdminX}>Broker</Radio>
+          <Radio disabled={!isAdminX}>Client</Radio>
+          <Radio disabled={!isAdminX}>Admin</Radio>
         </RadioGroup>
       </Layout>
 

@@ -9,7 +9,6 @@ const SingalImageUpload = ({ styles, client }) => {
   const [fileSelected, setFileSelected] = React.useState(false);
   const [fileSize, setFileSize] = React.useState(0);
   const [file, setFile] = React.useState("");
-  const [progressObj, setProgressObj] = React.useState({});
 
   const uploadImage = async () => {
     const doc = await DocumentPicker.getDocumentAsync({ type: "*/*" });

@@ -5,9 +5,17 @@ import { Text, useTheme } from "@ui-kitten/components";
 const OrderDetails = ({ navigation, handleHeader, route }) => {
   const theme = useTheme();
   React.useEffect(() => {
-    console.log("route", route.params.shipmentData.order);
     const unsubscribe = navigation.addListener("focus", () => {
       handleHeader("Order Details", "");
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", () => {
+      navigation.navigate("Shipment", {
+        pi: route && route.params?.shipmentData?.pi,
+      });
     });
     return unsubscribe;
   }, [navigation]);

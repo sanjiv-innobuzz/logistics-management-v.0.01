@@ -7,12 +7,17 @@ import AddShipment from "../../screens/AddShipment";
 import AddClient from "../../screens/AddClient";
 import Header from "../../common/components/Header";
 import PackagingMatrialStatus from "../../screens/AddShipment/Forms/1_PackagingMatrialStatus";
-import Schedule from "../../screens/AddShipment/Forms/2_Schedule";
+
 import ProductionSchedule from "../../screens/AddShipment/Forms/3_ProductionSchedule";
 import DocumentStatus from "../../screens/AddShipment/Forms/4_DocumentStatus";
 import ShipmentSchedule from "../../screens/AddShipment/Forms/5_ShipmentSchedule";
 import DocumentDispatchStatus from "../../screens/AddShipment/Forms/6_DocumentDispatchStatus";
 import OrderDetails from "../../screens/Shipment/OrderDetails";
+import UpdateSchedule from "../../screens/AddShipment/Forms/2_UpdateSchedule";
+import Schedule from "../../screens/AddShipment/Forms/2_UpdateSchedule/Schedule";
+// import Schedule from "../../screens/AddShipment/Forms/2_Schedule";
+// import SelectableSchedule from "../../screens/AddShipment/Forms/2_UpdateSchedule/SelectableSchedule";
+// import ScheduleUpdate from "../../screens/AddShipment/Forms/2_UpdateSchedule/ScheduleUpdate";
 // import ProductionSchedule from "../../screens/AddShipment/Forms/7_ProductionSchedule";
 // import DeliverySchedule from "../../screens/AddShipment/Forms/8_DeliverySchedule";
 // import DocumentStatus from "../../screens/AddShipment/Forms/9_DocumentStatus";
@@ -46,7 +51,6 @@ const ShipmentNav = ({ headerData, handleHeader }) => {
           </View>
         )}
       </Stack.Screen>
-
       <Stack.Screen name="AddClient">
         {(props) => (
           <View style={styles.mainBg}>
@@ -54,7 +58,6 @@ const ShipmentNav = ({ headerData, handleHeader }) => {
           </View>
         )}
       </Stack.Screen>
-
       <Stack.Screen name="PackagingMatrialStatus">
         {(props) => (
           <View style={styles.mainBg}>
@@ -62,15 +65,13 @@ const ShipmentNav = ({ headerData, handleHeader }) => {
           </View>
         )}
       </Stack.Screen>
-
       <Stack.Screen name="Schedule">
         {(props) => (
           <View style={styles.mainBg}>
-            <Schedule handleHeader={handleHeader} {...props} />
+            <UpdateSchedule handleHeader={handleHeader} {...props} />
           </View>
         )}
       </Stack.Screen>
-
       <Stack.Screen name="ProductionSchedule">
         {(props) => (
           <View style={styles.mainBg}>
@@ -78,7 +79,6 @@ const ShipmentNav = ({ headerData, handleHeader }) => {
           </View>
         )}
       </Stack.Screen>
-
       <Stack.Screen name="DocumentStatus">
         {(props) => (
           <View style={styles.mainBg}>
@@ -86,7 +86,6 @@ const ShipmentNav = ({ headerData, handleHeader }) => {
           </View>
         )}
       </Stack.Screen>
-
       <Stack.Screen name="ShipmentSchedule">
         {(props) => (
           <View style={styles.mainBg}>
@@ -94,7 +93,6 @@ const ShipmentNav = ({ headerData, handleHeader }) => {
           </View>
         )}
       </Stack.Screen>
-
       <Stack.Screen name="DocumentDispatchStatus">
         {(props) => (
           <View style={styles.mainBg}>
@@ -109,6 +107,20 @@ const ShipmentNav = ({ headerData, handleHeader }) => {
           </View>
         )}
       </Stack.Screen>
+      <Stack.Screen name="ScheduleForm">
+        {(props) => (
+          <View style={styles.mainBg}>
+            <Schedule handleHeader={handleHeader} {...props} />
+          </View>
+        )}
+      </Stack.Screen>
+      {/* <Stack.Screen name="SelectableSchedule">
+        {(props) => (
+          <View style={styles.mainBg}>
+            <SelectableSchedule handleHeader={handleHeader} {...props} />
+          </View>
+        )}
+      </Stack.Screen> */}
 
       {/* <Stack.Screen name="ProductionSchedule">
         {(props) => (
@@ -117,7 +129,6 @@ const ShipmentNav = ({ headerData, handleHeader }) => {
           </View>
         )}
       </Stack.Screen> */}
-
       {/* <Stack.Screen name="DeliverySchedule">
         {(props) => (
           <View style={styles.mainBg}>
@@ -125,7 +136,6 @@ const ShipmentNav = ({ headerData, handleHeader }) => {
           </View>
         )}
       </Stack.Screen> */}
-
       {/* <Stack.Screen name="DocumentStatus">
         {(props) => (
           <View style={styles.mainBg}>
@@ -133,7 +143,6 @@ const ShipmentNav = ({ headerData, handleHeader }) => {
           </View>
         )}
       </Stack.Screen> */}
-
       {/* <Stack.Screen name="FinalPayment">
         {(props) => (
           <View style={styles.mainBg}>

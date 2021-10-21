@@ -76,7 +76,7 @@ const ShipmentEntry = ({
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate("Shipment", { ...shipment, role })}
+      onPress={() => navigation.navigate("Shipment", { pi: shipment.pi, role })}
     >
       <View style={styles.container} disabled={true} appearance="filled">
         <View style={styles.row}>

@@ -1,13 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import {
-  Text,
-  useTheme,
-  Avatar,
-  Icon,
-  Divider,
-  Spinner,
-} from "@ui-kitten/components";
+import { Text, useTheme, Avatar, Icon, Divider } from "@ui-kitten/components";
 import {
   StyleSheet,
   View,
@@ -146,7 +139,7 @@ const NewsFeed = ({
 
   React.useEffect(() => {
     getArticles({ page }, () => {
-      //TODO: need to implement pagination
+      //TODO: need to implement pagination v0.0.2
       setLoader(false);
       setPage(page + 1);
     });
@@ -180,11 +173,25 @@ const NewsFeed = ({
       {/* <View style={{paddingBottom:100}}> */}
 
       {loader ? (
-        <View style={styles.loader}>
-          <Spinner size="giant" status="basic" />
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Text>Loading....</Text>
         </View>
       ) : articleList.length < 1 ? (
-        <Text style={styles.inactiveText}>No articles found.</Text>
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Text style={styles.inactiveText}>No articles found.</Text>
+        </View>
       ) : (
         <>
           <Text category="h6" style={styles.newsCat}>
