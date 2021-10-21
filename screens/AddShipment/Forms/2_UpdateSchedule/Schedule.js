@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, KeyboardAvoidingView } from "react-native";
+import { ScrollView, KeyboardAvoidingView, View } from "react-native";
 import { connect } from "react-redux";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Card, useTheme, Text } from "@ui-kitten/components";
@@ -35,12 +35,11 @@ const Schedule = ({
     destinationPort: "",
     scheduleUpdate: "",
   });
-  // console.log("order data", order);
-  // const [warning, setWarning] = React.useState(false);
+
   const [shipment, setShipment] = React.useState(initialShipment());
   const [loader, setLoader] = React.useState(false);
   const [error, setError] = React.useState(false);
-  const [progress, setProgress] = React.useState(false);
+  const [progress, setProgress] = React.useState(true);
 
   const insets = useSafeAreaInsets();
   const theme = useTheme();
@@ -73,10 +72,6 @@ const Schedule = ({
   const handleChange = (updateShipment) => {
     setShipment(updateShipment);
   };
-
-  // React.useEffect(() => {
-
-  // }, []);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -156,7 +151,7 @@ const Schedule = ({
     return () => setShipment(initialShipment());
   }, [pi]);
 
-  return (
+  return !progress ? (
     <>
       {/* <ConfirmPopUp
         styles={styles}
@@ -193,6 +188,16 @@ const Schedule = ({
         </KeyboardAvoidingView>
       </Card>
     </>
+  ) : (
+    <View
+      style={{
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Text style={{ color: "white" }}>Loading....</Text>
+    </View>
   );
 };
 const mapStateToProps = ({ shipmentApi, userApi }) => {

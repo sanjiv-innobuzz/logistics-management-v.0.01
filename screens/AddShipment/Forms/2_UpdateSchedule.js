@@ -1,88 +1,7 @@
-// import React from "react";
-// import { connect } from "react-redux";
-// import { View } from "react-native";
-// import { Text, Button } from "@ui-kitten/components";
-// import { getCurrentUser } from "../../../api/user/userActions";
-
-// const UpdateSchedule = ({
-//   navigation,
-//   handleHeader,
-//   shipmentList,
-//   route,
-//   getCurrentUser,
-// }) => {
-//   const { pi } = route.params;
-//   const [shipment, setShipment] = React.useState([]);
-//   const [progress, setProgress] = React.useState(false);
-//   console.log("pi n-----", pi);
-
-//   React.useEffect(() => {
-//     const unsubscribe = navigation.addListener("focus", () => {
-//       handleHeader("Delivery Scheduling", "");
-//     });
-//     return unsubscribe;
-//   }, []);
-
-//   React.useEffect(() => {
-//     setProgress(true);
-//     getCurrentUser({}, (currentUser) => {
-//       const filteredShipment =
-//         shipmentList &&
-//         shipmentList.filter((shipmentObj) => shipmentObj.pi == pi);
-//       if (filteredShipment.length > 0) {
-//         console.log("filtered data ", filteredShipment);
-
-//         setShipment(filteredShipment[0]);
-//         setProgress(false);
-//       } else {
-//         setProgress(false);
-//       }
-//     });
-//     return () => setShipment([]);
-//   }, [pi]);
-
-//   return (
-//     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-//       <Text
-//         category="c2"
-//         style={{
-//           color: "white",
-//           textTransform: "uppercase",
-//           marginBottom: 10,
-//           fontSize: 17,
-//         }}
-//       >
-//         schaduling pi : {pi} orders
-//       </Text>
-//       <Button
-//         onPress={() =>
-//           navigation.navigate("ShipmentNav", {
-//             screen: "SelectableSchedule",
-//             params: { shipmentData: shipment },
-//           })
-//         }
-//         style={{
-//           backgroundColor: "red",
-//         }}
-//       >
-//         Add Schedule
-//       </Button>
-//     </View>
-//   );
-// };
-
-// const mapStateToProps = ({ shipmentApi, userApi }) => {
-//   return {
-//     shipmentList: shipmentApi,
-//     userList: userApi,
-//   };
-// };
-// export default connect(mapStateToProps, { getCurrentUser })(UpdateSchedule);
-
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { View, FlatList, TouchableHighlight } from "react-native";
-import { Text, useTheme, CheckBox, Button } from "@ui-kitten/components";
+import { Text, useTheme, CheckBox, Button, Icon } from "@ui-kitten/components";
 import { getCurrentUser } from "../../../api/user/userActions";
 
 const UpdateSchedule = ({
@@ -94,9 +13,8 @@ const UpdateSchedule = ({
 }) => {
   const { pi } = route.params;
   const theme = useTheme();
-  const [checked, setChecked] = useState({});
   const [order, setOrder] = useState([]);
-  const [progress, setProgress] = useState(false);
+  const [progress, setProgress] = useState(true);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -132,7 +50,17 @@ const UpdateSchedule = ({
       }
     });
     return () => setOrder([]);
-  }, [pi, shipmentList]);
+  }, [pi]);
+
+  React.useEffect(() => {
+    const filteredShipment =
+      shipmentList &&
+      shipmentList.filter((shipmentObj) => shipmentObj.pi == pi);
+    if (filteredShipment.length > 0) {
+      setOrder(filteredShipment[0].order);
+    }
+    return () => setOrder([]);
+  }, [shipmentList]);
 
   const handleScheduling = (order) => {
     navigation.navigate("ShipmentNav", {
@@ -155,30 +83,10 @@ const UpdateSchedule = ({
           renderItem={({ item }) => (
             <TouchableHighlight
               onPress={() => handleScheduling(item)}
-              disabled={item?.isScheduled}
+              underlayColor="transparent"
+              // disabled={item?.isScheduled}
             >
               <>
-                {/* {item?.isScheduled ? (
-                <View
-                  style={{
-                    flex: 1,
-                    maxWidth: 200,
-                    borderRadius: 5,
-                    maxHeight: 25,
-                    backgroundColor: "red",
-                    marginBottom: -15,
-                    padding: 5,
-                    marginLeft: 10,
-                    zIndex: 777,
-                  }}
-                >
-                  <Text style={{ fontSize: 12, color: "white" }}>
-                    Already scheduled
-                  </Text>
-                </View>
-              ) : (
-                <></>
-              )} */}
                 <View
                   style={{
                     flexDirection: "row",
@@ -215,12 +123,6 @@ const UpdateSchedule = ({
                         Brand
                       </Text>
                       <Text style={{ fontSize: 14 }}>{item.brand}</Text>
-                      {/* <View style={{ flex: 1, flexDirection: "row" }}>
-                <Text style={{ fontSize: 10, color: theme["color-basic-600"] }}>
-                  Quality
-                </Text>
-                <Text category="label">{" " + item.quality}</Text>
-              </View> */}
                     </View>
                     <View style={{ flex: 1, justifyContent: "center" }}>
                       <Text
@@ -265,12 +167,7 @@ const UpdateSchedule = ({
                       <Text style={{ fontSize: 14 }}>{item.quantity}</Text>
                     </View>
                     <View>
-                      <Text>{item?.isScheduled.toString()}</Text>
-                      {/* {console.log("select --== ", item)} */}
-                      {/* <CheckBox
-                    checked={item?.isScheduled}
-                    onChange={(nextChecked) => handleSelcet(item._id)}
-                  ></CheckBox> */}
+                      <Text></Text>
                     </View>
                   </>
                 </View>
