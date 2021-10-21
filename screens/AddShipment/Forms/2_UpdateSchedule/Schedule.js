@@ -47,7 +47,7 @@ const Schedule = ({
 
   const handleBack = () => {
     // setWarning(false);
-    navigation.navigate("Shipment", { pi });
+    navigation.navigate("Schedule", { pi });
   };
 
   const handleSubmit = (shipment) => {
@@ -82,7 +82,7 @@ const Schedule = ({
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", () => {
-      navigation.navigate("Shipment", { pi });
+      navigation.navigate("Schedule", { pi });
     });
     return unsubscribe;
   }, [navigation]);

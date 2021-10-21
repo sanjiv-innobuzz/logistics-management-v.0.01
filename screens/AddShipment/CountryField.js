@@ -7,7 +7,7 @@ import countries from "./CountryField/countries";
 const filter = (item, query) =>
   item.toLowerCase().includes(query.toLowerCase());
 
-const CountryField = ({ styles, handleChange, countryName = "" }) => {
+const CountryField = ({ styles, handleChange, countryName = "", shipment }) => {
   const [country, setCountry] = React.useState({
     Name: countryName,
     Code: null,
@@ -29,6 +29,10 @@ const CountryField = ({ styles, handleChange, countryName = "" }) => {
     setCountry(null);
     setData(countries);
   };
+
+  React.useEffect(() => {
+    setCountry({ Name: shipment && shipment.country, Code: null });
+  }, [shipment]);
 
   const renderCountryIcon = (code) => (
     <Image

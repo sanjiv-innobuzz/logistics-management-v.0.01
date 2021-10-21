@@ -277,6 +277,7 @@ const AddShipment = ({
                 styles={styles}
                 handleChange={handleChange}
                 countryName={shipment.country}
+                shipment={shipment}
               />
             </Layout>
 

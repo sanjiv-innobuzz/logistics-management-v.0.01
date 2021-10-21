@@ -15,13 +15,6 @@ import DocumentDispatchStatus from "../../screens/AddShipment/Forms/6_DocumentDi
 import OrderDetails from "../../screens/Shipment/OrderDetails";
 import UpdateSchedule from "../../screens/AddShipment/Forms/2_UpdateSchedule";
 import Schedule from "../../screens/AddShipment/Forms/2_UpdateSchedule/Schedule";
-// import Schedule from "../../screens/AddShipment/Forms/2_Schedule";
-// import SelectableSchedule from "../../screens/AddShipment/Forms/2_UpdateSchedule/SelectableSchedule";
-// import ScheduleUpdate from "../../screens/AddShipment/Forms/2_UpdateSchedule/ScheduleUpdate";
-// import ProductionSchedule from "../../screens/AddShipment/Forms/7_ProductionSchedule";
-// import DeliverySchedule from "../../screens/AddShipment/Forms/8_DeliverySchedule";
-// import DocumentStatus from "../../screens/AddShipment/Forms/9_DocumentStatus";
-// import FinalPayment from "../../screens/AddShipment/Forms/10_FinalPayment";
 
 const Stack = createStackNavigator();
 
@@ -114,42 +107,6 @@ const ShipmentNav = ({ headerData, handleHeader }) => {
           </View>
         )}
       </Stack.Screen>
-      {/* <Stack.Screen name="SelectableSchedule">
-        {(props) => (
-          <View style={styles.mainBg}>
-            <SelectableSchedule handleHeader={handleHeader} {...props} />
-          </View>
-        )}
-      </Stack.Screen> */}
-
-      {/* <Stack.Screen name="ProductionSchedule">
-        {(props) => (
-          <View style={styles.mainBg}>
-            <ProductionSchedule handleHeader={handleHeader} {...props} />
-          </View>
-        )}
-      </Stack.Screen> */}
-      {/* <Stack.Screen name="DeliverySchedule">
-        {(props) => (
-          <View style={styles.mainBg}>
-            <DeliverySchedule handleHeader={handleHeader} {...props} />
-          </View>
-        )}
-      </Stack.Screen> */}
-      {/* <Stack.Screen name="DocumentStatus">
-        {(props) => (
-          <View style={styles.mainBg}>
-            <DocumentStatus handleHeader={handleHeader} {...props} />
-          </View>
-        )}
-      </Stack.Screen> */}
-      {/* <Stack.Screen name="FinalPayment">
-        {(props) => (
-          <View style={styles.mainBg}>
-            <FinalPayment handleHeader={handleHeader} {...props} />
-          </View>
-        )}
-      </Stack.Screen> */}
     </Stack.Navigator>
   );
 };

@@ -20,7 +20,7 @@
     "@ui-kitten/components": "^5.1.0",
     "@ui-kitten/eva-icons": "^5.1.0",
     "axios": "^0.21.1",
-    "expo": "~41.0.1",
+    "expo": "^41.0.1",
     "expo-document-picker": "^9.1.2",
     "expo-file-system": "~11.0.2",
     "expo-linear-gradient": "~9.1.0",
