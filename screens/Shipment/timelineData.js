@@ -83,10 +83,7 @@ ${packagingMatrialReceived ? "Packaging Matrial Recived" : ""}`,
         timelineData.push(
           timelineComponent(
             "SCHEDULE",
-            `schedule at ${moment(dateScheduled).format("lll")}
-quntity ${quantity} with pack size ${packsize}
-updated by ${scheduleUpdate}
-                        `,
+            `click to schedule your shipment `,
             // "work in progress",
             "object-ungroup",
             date,

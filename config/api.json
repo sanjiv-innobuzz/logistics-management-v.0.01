@@ -1,5 +1,5 @@
 {
-  "url": "http://134.255.216.211:5000",
+  "url": "http://103.199.227.17:5000",
   "routes": {
     "login": "/api/v0.0.1/user/login",
     "changePassword": "/api/v0.0.1/user/changePassword",

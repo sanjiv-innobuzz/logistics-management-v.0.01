@@ -47,7 +47,11 @@ const Schedule = ({
 
   const handleBack = () => {
     // setWarning(false);
-    navigation.navigate("Schedule", { pi });
+    // navigation.navigate("Schedule", { pi });
+    navigation.navigate("ShipmentNav", {
+      screen: "Schedule",
+      params: { pi },
+    });
   };
 
   const handleSubmit = (shipment) => {
@@ -60,7 +64,11 @@ const Schedule = ({
       if (uploadedData) {
         //should be sent true
         setShipment(initialShipment());
-        navigation.navigate("Schedule", { pi });
+        // navigation.navigate("Schedule", { pi });
+        navigation.navigate("ShipmentNav", {
+          screen: "Schedule",
+          params: { pi },
+        });
       } else {
         setError(
           "Server is not able to process this request. Please try again !!"
@@ -82,7 +90,11 @@ const Schedule = ({
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", () => {
-      navigation.navigate("Schedule", { pi });
+      // navigation.navigate("Schedule", { pi });
+      navigation.navigate("ShipmentNav", {
+        screen: "Schedule",
+        params: { pi },
+      });
     });
     return unsubscribe;
   }, [navigation]);

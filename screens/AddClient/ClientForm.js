@@ -13,6 +13,7 @@ import {
 import extCodes from "./extCodes";
 import SingalImageUpload from "../EditUserDetails/SingalImageUpload";
 import { UserContext } from "../../App";
+import ImageUploadWithMulter from "../EditUserDetails/ImageUploadWithMulter";
 
 const ClientForm = ({ styles, handleChange, client, editUser = false }) => {
   const roles = ["Agent", "Broker", "Client", "Admin"];
@@ -148,6 +149,13 @@ const ClientForm = ({ styles, handleChange, client, editUser = false }) => {
         size="large"
         onChangeText={(password) => handleChange({ ...client, password })}
       />
+
+      {/*temp change */}
+      {/* <ImageUploadWithMulter
+        styles={styles}
+        handleChange={handleChange}
+        client={client}
+      /> */}
       {editUser ? (
         <SingalImageUpload
           styles={styles}

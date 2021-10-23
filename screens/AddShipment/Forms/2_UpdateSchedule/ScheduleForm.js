@@ -171,9 +171,9 @@ const ScheduleForm = ({ styles, handleChange, shipment, pi, theme }) => {
         size="large"
         multiline={true}
         value={shipment?.destinationPort}
-        // onChangeText={(destinationPort) =>
-        //   handleChange({ ...shipment, destinationPort })
-        // }
+        onChangeText={(destinationPort) =>
+          handleChange({ ...shipment, destinationPort })
+        }
       />
       <Input
         style={styles.input}

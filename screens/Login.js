@@ -46,6 +46,9 @@ const Login = ({ login, register, user }) => {
   const [secureTextEntryRe, setSecureTextEntryRe] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
   const { getActiveUser } = React.useContext(UserContext);
+  const [serverError, setServerError] = React.useState(
+    "Bad Creadantial OR Server Unavailable !"
+  );
   // useEffect(() => {
   //   if (user && user.status === 200 && signup && user.isLogin) {
   //     toggleSignUp(!signup);
@@ -121,6 +124,7 @@ const Login = ({ login, register, user }) => {
           setLoading(false);
         } else {
           // alert("Bad records!");
+          setServerError("Bad Creadantial OR Server Unavailable !");
           setVisible(true);
           setLoading(false);
         }
@@ -147,20 +151,25 @@ const Login = ({ login, register, user }) => {
       setError({ email: "Email Id can't be empty." });
       setLoading(false);
       return;
-    } else if (email.length > 5) {
-      const stx = emailRgx.test(password);
+    }
+    if (email.length > 5) {
+      const stx = emailRgx.test(email);
       if (!stx) {
         setError({
           email: "Email not valid",
         });
+        setLoading(false);
+        return;
       }
       setLoading(false);
-      return;
-    } else if (password === "") {
+    }
+
+    if (password === "") {
       setError({ password: "Password can't be empty." });
       setLoading(false);
       return;
-    } else if (password.length > 5) {
+    }
+    if (password.length > 5) {
       const st = psregx.test(password);
       console.log("pass test", st);
       if (!st) {
@@ -168,10 +177,12 @@ const Login = ({ login, register, user }) => {
           password:
             "Password contains at least 1 Capital, 1 Numer, 1 Special Char ",
         });
+        setLoading(false);
+        return;
       }
       setLoading(false);
-      return;
-    } else if (repassword === "") {
+    }
+    if (repassword === "") {
       setError({ repassword: "Passwords doesn't match." });
       setLoading(false);
       return;
@@ -180,6 +191,7 @@ const Login = ({ login, register, user }) => {
       setLoading(false);
       return;
     } else {
+      setLoading(true);
       const creds = { name: name.trim(), email, password, repassword };
       register(creds, (status) => {
         if (status) {
@@ -188,6 +200,7 @@ const Login = ({ login, register, user }) => {
           setLoading(false);
           navigation.navigate("Main");
         } else {
+          setServerError("Email already exist OR Server Unavailable !");
           setVisible(true);
           setLoading(false);
         }
@@ -211,6 +224,7 @@ const Login = ({ login, register, user }) => {
               alignItems: "center",
               backgroundColor: "red",
               borderRadius: 50,
+              padding: 0,
               width: "100%",
             }}
           >
@@ -224,8 +238,15 @@ const Login = ({ login, register, user }) => {
         }
         style={{ backgroundColor: "white" }}
       >
-        <Text style={{ marginTop: -16, marginBottom: 32, textAlign: "center" }}>
-          Bad Creadantial OR Server Unavailable !
+        <Text
+          style={{
+            marginTop: -16,
+            marginBottom: 32,
+            fontSize: 12,
+            textAlign: "center",
+          }}
+        >
+          {serverError}
         </Text>
       </FancyAlert>
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
