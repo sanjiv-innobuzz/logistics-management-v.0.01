@@ -196,9 +196,10 @@ const Login = ({ login, register, user }) => {
       register(creds, (status) => {
         if (status) {
           getActiveUser();
-
           setLoading(false);
-          navigation.navigate("Main");
+          toggleSignUp(!signup);
+
+          // navigation.navigate("Main");
         } else {
           setServerError("Email already exist OR Server Unavailable !");
           setVisible(true);

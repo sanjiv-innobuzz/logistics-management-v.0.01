@@ -53,6 +53,7 @@ const UpdateSchedule = ({
   }, [pi]);
 
   React.useEffect(() => {
+    // console.log("call to update");
     const filteredShipment =
       shipmentList &&
       shipmentList.filter((shipmentObj) => shipmentObj.pi == pi);
