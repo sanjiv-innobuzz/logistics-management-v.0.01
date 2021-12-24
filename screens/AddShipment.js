@@ -40,6 +40,7 @@ const AddShipment = ({
     country: "",
     destinationPort: "",
     id: "",
+    invoiceNo: "",
   };
 
   const { pi } = route.params;
@@ -134,7 +135,7 @@ const AddShipment = ({
   };
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", () => {
-      navigation.navigate("Dashboard");
+      // navigation.navigate("Dashboard");
     });
     return unsubscribe;
   }, [navigation]);
@@ -156,6 +157,7 @@ const AddShipment = ({
           country: shipmentObj?.country,
           destinationPort: shipmentObj?.destinationPort,
           id: shipmentObj?._id,
+          invoiceNo: shipmentObj?.invoiceNo,
         });
 
         setOrders([...shipmentObj?.order.map((o) => 1), 1]);
@@ -210,6 +212,7 @@ const AddShipment = ({
                 placeholder="Unique PI Number..."
                 onChangeText={(nextValue) => handleChange("pi", nextValue)}
               />
+
               <Datepicker
                 label="Date"
                 size="large"
@@ -249,6 +252,16 @@ const AddShipment = ({
                 styles={styles}
                 handleChange={handleChange}
                 shipment={shipment}
+              />
+              <Input
+                style={{ marginBottom: 10 }}
+                size="large"
+                value={shipment.invoiceNo}
+                label="Invoice Number"
+                placeholder="Enter invoice number"
+                onChangeText={(nextValue) =>
+                  handleChange("invoiceNo", nextValue)
+                }
               />
             </Layout>
 

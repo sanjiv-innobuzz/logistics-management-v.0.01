@@ -31,12 +31,12 @@ const AddClient = ({ register, navigation, getUsers }) => {
 
   const handleBack = () => {
     setWarning(false);
-    navigation.navigate("Dashboard");
+    // navigation.navigate("Dashboard");
   };
 
   const handleSubmit = (client) => {
     setLoader(true);
-    console.log("i calll-------------------");
+    // console.log("i calll-------------------");
     register(client, (status) => {
       if (status) {
         getUsers({}, (status) => {
@@ -45,7 +45,7 @@ const AddClient = ({ register, navigation, getUsers }) => {
         setLoader(false);
         navigation.navigate("AddShipment");
       }
-      console.log("i calll--------+++-----------", status);
+      // console.log("i calll--------+++-----------", status);
     });
   };
 

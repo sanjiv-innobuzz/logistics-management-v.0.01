@@ -2,7 +2,14 @@ import React from "react";
 import { ScrollView } from "react-native";
 import { connect } from "react-redux";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Card, useTheme, CheckBox, Divider, Text } from "@ui-kitten/components";
+import {
+  Card,
+  useTheme,
+  CheckBox,
+  Divider,
+  Text,
+  Datepicker,
+} from "@ui-kitten/components";
 
 import { packagingMatrialStatus } from "../../../api/shipment/shipmentActions";
 import design from "../common/design";
@@ -23,6 +30,7 @@ const PackagingMatrialStatus = ({
     artWorkApproved: false,
     underPrinting: false,
     packagingMatrialReceived: false,
+    artWorkDate: new Date(),
     pi,
     id: "",
   });
@@ -83,6 +91,7 @@ const PackagingMatrialStatus = ({
               packageMatriailObj?.packagingMatrialReceived,
             pi: packageMatriailObj?.pi,
             id: packageMatriailObj?._id,
+            artWorkDate: new Date(packageMatriailObj?.artWorkDate),
           });
         }
         // console.log(filteredShipment[0], "--", packageMatriailObj);
@@ -108,6 +117,7 @@ const PackagingMatrialStatus = ({
             packageMatriailObj?.packagingMatrialReceived,
           pi: packageMatriailObj?.pi,
           id: packageMatriailObj?._id,
+          artWorkDate: new Date(packageMatriailObj?.artWorkDate),
         });
       }
       // console.log(filteredShipment[0], "--", packageMatriailObj);
@@ -188,6 +198,17 @@ const PackagingMatrialStatus = ({
           >
             {`PACKAGING MATERIAL RECEIVED`}
           </CheckBox>
+          <Divider style={styles.divider} />
+          <Datepicker
+            style={styles.input}
+            label="Art Work Date"
+            size="large"
+            // style={styles.inputHalf}
+            date={shipment.artWorkDate}
+            onSelect={(artWorkDate) =>
+              handleChange({ ...shipment, artWorkDate })
+            }
+          />
         </ScrollView>
       </Card>
     </>

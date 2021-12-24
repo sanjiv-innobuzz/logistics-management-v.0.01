@@ -1,6 +1,6 @@
 import { Avatar, Icon, Text, Button, useTheme } from "@ui-kitten/components";
 import React, { useEffect } from "react";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View, Linking } from "react-native";
 import moment from "moment";
 
 import Timeline from "../../common/components/Timeline";
@@ -130,6 +130,12 @@ const ShipmentEntry = ({
           <Button
             style={styles.actionButton}
             status="basic"
+            onPress={() =>
+              Linking.openURL(
+                "mailto:support.biel@biel.com?subject=biel support"
+              )
+            }
+            // title="support@example.com"
             accessoryLeft={(props) => <Icon {...props} name="email" />}
           />
 

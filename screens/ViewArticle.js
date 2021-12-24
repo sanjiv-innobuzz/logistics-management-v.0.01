@@ -57,7 +57,11 @@ const ViewArticle = ({ handleHeader, navigation, route }) => {
   }, [navigation]);
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", () => {
-      navigation.navigate("Dashboard");
+      // navigation.navigate("Newsfeed");
+      // navigation.navigate("NewsArticleNav", {
+      //   screen: "Newsfeed",
+      //   params: {},
+      // });
     });
     return unsubscribe;
   }, [navigation]);

@@ -1,8 +1,16 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { View, FlatList, TouchableHighlight } from "react-native";
+import {
+  View,
+  FlatList,
+  TouchableHighlight,
+  RefreshControl,
+} from "react-native";
 import { Text, useTheme, CheckBox, Button, Icon } from "@ui-kitten/components";
-import { getCurrentUser } from "../../../api/user/userActions";
+import {
+  getCurrentUser,
+  getShipmentDetails,
+} from "../../../api/user/userActions";
 
 const UpdateSchedule = ({
   navigation,
@@ -15,6 +23,7 @@ const UpdateSchedule = ({
   const theme = useTheme();
   const [order, setOrder] = useState([]);
   const [progress, setProgress] = useState(true);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -52,8 +61,20 @@ const UpdateSchedule = ({
     return () => setOrder([]);
   }, [pi]);
 
+  // const onRefresh = React.useCallback(async () => {
+  //   console.log("update x");
+  //   getShipmentDetails({ pi }, (status) => {
+  //     if (status) {
+  //       getUsers({}, (userStatus) => {
+  //         setRefreshing(false);
+  //       });
+  //     }
+  //     setRefreshing(false);
+  //   });
+  // }, [refreshing]);
+
   React.useEffect(() => {
-    // console.log("call to update");
+    // tconsole.log("call to update");
     const filteredShipment =
       shipmentList &&
       shipmentList.filter((shipmentObj) => shipmentObj.pi == pi);
@@ -76,7 +97,7 @@ const UpdateSchedule = ({
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
-          <Text>Loading</Text>
+          <Text>Loading...</Text>
         </View>
       ) : (
         <FlatList
@@ -176,6 +197,9 @@ const UpdateSchedule = ({
             </TouchableHighlight>
           )}
           keyExtractor={(item) => item._id}
+          // refreshControl={
+          //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          // }
         />
       )}
     </View>

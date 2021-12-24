@@ -100,12 +100,13 @@ const ViewUsers = ({
     );
   };
 
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener("beforeRemove", () => {
-      navigation.navigate("Dashboard");
-    });
-    return unsubscribe;
-  }, [navigation]);
+  //23/12
+  // React.useEffect(() => {
+  //   const unsubscribe = navigation.addListener("beforeRemove", () => {
+  //     navigation.navigate("Dashboard");
+  //   });
+  //   return unsubscribe;
+  // }, [navigation]);
 
   return (
     <>

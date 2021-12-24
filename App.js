@@ -20,10 +20,11 @@ import { default as mapping } from "./config/mapping.json";
 //push nptificarion
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
-import { Alert, ImageBackground, View, Text } from "react-native";
+import { BackHandler, View, Text } from "react-native";
 import NetInfo from "@react-native-community/netinfo";
 import { LogBox } from "react-native";
 import { saveToken } from "./api/notification/notificationAction";
+import * as SecureStore from "expo-secure-store";
 LogBox.ignoreAllLogs(true);
 
 export const UserContext = React.createContext();
@@ -100,7 +101,17 @@ function App() {
   });
 
   const _handleNotification = (notification) => {
-    console.log("noti", notification);
+    console.log("noti++++++++", notification.request.content.title);
+    if (
+      notification.request.content.title === "Your account password changed"
+    ) {
+      setTimeout(async () => {
+        alert("Your account password changed please login ");
+        await SecureStore.setItemAsync("token", "");
+
+        BackHandler.exitApp();
+      }, 1500);
+    }
   };
 
   const _handleNotificationResponse = (response) => {

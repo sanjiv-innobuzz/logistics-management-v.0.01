@@ -138,12 +138,12 @@ const NewsFeed = ({
   //   }
 
   React.useEffect(() => {
+    setLoader(true);
     getArticles({ page }, () => {
       //TODO: need to implement pagination v0.0.2
       setLoader(false);
       setPage(page + 1);
     });
-    setLoader(true);
   }, []);
 
   const edit = (item) => {

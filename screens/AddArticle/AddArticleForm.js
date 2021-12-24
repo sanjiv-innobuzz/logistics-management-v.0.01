@@ -3,6 +3,7 @@ import { Divider, Icon, CheckBox, Input } from "@ui-kitten/components";
 import { View } from "react-native";
 import Editor from "./Editor";
 import ArticleImageUpload from "./ArticleImageUpload";
+import ArticleImageUploadX from "./FormDataUpload";
 
 const AddArticleForm = ({ styles, handleChange, article, theme }) => {
   return (
@@ -35,6 +36,12 @@ const AddArticleForm = ({ styles, handleChange, article, theme }) => {
         article={article}
         theme={theme}
       />
+      {/* <ArticleImageUploadX
+        styles={styles}
+        handleChange={handleChange}
+        article={article}
+        theme={theme}
+      /> */}
       <CheckBox
         style={styles.input}
         checked={article.featured}

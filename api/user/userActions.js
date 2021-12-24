@@ -1,6 +1,5 @@
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
-import { AsyncStorage } from "react-native";
 
 import {
   url,
@@ -254,3 +253,18 @@ export const getCurrentUserX = async (body, callback) => {
 //     error: body,
 //   });
 // };
+
+export const resetPassword = async (body, cb) => {
+  try {
+    const user = await axios
+      .post(`${url}${routes.resetPassword}`, body, requestConfig)
+      .catch((e) => {
+        throw e;
+      });
+    cb(true);
+  } catch (e) {
+    console.log(e);
+
+    cb(false);
+  }
+};

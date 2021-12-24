@@ -31,6 +31,7 @@ const ShipmentSchedule = ({
     estArrival: new Date(),
     billLandingNo: "",
     containerNo: "",
+    comment: "",
   });
 
   // const [warning, setWarning] = React.useState(false);
@@ -94,6 +95,7 @@ const ShipmentSchedule = ({
           containerNo: shipmentScheduleUpdate?.containerNo,
           pi: shipmentScheduleUpdate.pi,
           id: shipmentScheduleUpdate._id,
+          comment: shipmentScheduleUpdate.comment,
         });
       setProgress(false);
     } else {
@@ -203,6 +205,22 @@ const ShipmentSchedule = ({
                 setShipment((previosData) => ({
                   ...previosData,
                   billLandingNo: bill,
+                }))
+              }
+            />
+            <Divider style={styles.divider} />
+            <Input
+              style={styles.input}
+              label="Comment:"
+              size="medium"
+              placeholder="Comment here"
+              size="large"
+              value={shipment?.comment}
+              multiline={true}
+              onChangeText={(comment) =>
+                setShipment((previosData) => ({
+                  ...previosData,
+                  comment: comment,
                 }))
               }
             />

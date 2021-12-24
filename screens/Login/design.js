@@ -5,9 +5,9 @@ const design = (insets, theme) =>
     container: {
       flex: 1,
       marginTop: StatusBar.currentHeight,
-      paddingHorizontal: 60,
+      paddingHorizontal: 50,
       // justifyContent: "center",
-      justifyContent: "flex-end",
+      // justifyContent: "flex-end",
       backgroundColor: "transparent",
       // paddingTop: 200,
       // alignItems: "center",

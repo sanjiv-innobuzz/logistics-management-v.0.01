@@ -145,13 +145,17 @@ const DrawerMenu = ({ navigation, logout }) => {
               accessoryLeft={SettingsIcon}
               style={styles.drawerGroup}
             >
-              <DrawerItem
+              {/* <DrawerItem
                 title="Dark Theme"
                 accessoryLeft={MoonIcon}
                 accessoryRight={ToggleIcon}
-              />
+              /> */}
 
-              <DrawerItem title="Notifications" accessoryLeft={BellIcon} />
+              <DrawerItem
+                title="Notifications"
+                accessoryLeft={BellIcon}
+                onPress={() => navigation.navigate("ALERTS")}
+              />
             </DrawerGroup>
             {
               //

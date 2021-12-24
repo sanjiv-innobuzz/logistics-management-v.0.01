@@ -26,6 +26,7 @@ const DocumentDispatchStatus = ({
     telex: false,
     toBuyer: false,
     toBank: false,
+    comment: "",
   });
 
   // const [warning, setWarning] = React.useState(false);
@@ -85,9 +86,10 @@ const DocumentDispatchStatus = ({
           telex: documentDispatch.telex,
           toBuyer: documentDispatch.toBuyer,
           toBank: documentDispatch.toBank,
-          // dhl: documentDispatch?.dhl,
+          dhl: documentDispatch?.dhl,
           pi: documentDispatch.pi,
           id: documentDispatch._id,
+          comment: documentDispatch.comment,
         });
       setProgress(false);
     } else {

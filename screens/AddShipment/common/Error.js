@@ -1,6 +1,6 @@
 import React from "react";
 import { Text } from "@ui-kitten/components";
-import { FancyAlert } from "react-native-expo-fancy-alerts";
+// import { FancyAlert } from "react-native-expo-fancy-alerts";
 
 const Error = ({ error, styles }) => {
   return (

@@ -6,6 +6,7 @@
     "editUserDetails": "/api/v0.0.1/user/editUserDetails",
     "register": "/api/v0.0.1/user/register",
     "getUsers": "/api/v0.0.1/user/getUsers",
+    "resetPassword": "/api/v0.0.1/user/resetPassword",
     "getCurrentUser": "/api/v0.0.1/user/getCurrentUser",
     "addShipment": "/api/v0.0.1/shipment/addShipment",
     "getShipments": "/api/v0.0.1/shipment/getShipments",

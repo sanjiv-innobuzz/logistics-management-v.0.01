@@ -42,6 +42,22 @@ const PackageMaterialArrivedForm = ({ styles, handleChange, shipment }) => {
         value={shipment?.dhl}
         onChangeText={(dhl) => handleChange({ ...shipment, dhl })}
       />
+      <Divider style={styles.divider} />
+      <Input
+        style={styles.input}
+        label="Comment:"
+        size="medium"
+        placeholder="Comment here"
+        size="large"
+        value={shipment?.comment}
+        multiline={true}
+        onChangeText={(comment) =>
+          handleChange({
+            ...shipment,
+            comment,
+          })
+        }
+      />
     </>
   );
 };

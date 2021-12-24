@@ -42,7 +42,6 @@ const NewsNav = ({ headerData, handleHeader }) => {
           </View>
         )}
       </Stack.Screen>
-      
     </Stack.Navigator>
   );
 };

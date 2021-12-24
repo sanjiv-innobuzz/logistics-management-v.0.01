@@ -101,12 +101,14 @@ const AddArticle = ({
     });
     return unsubscribe;
   }, [navigation]);
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener("beforeRemove", () => {
-      navigation.navigate("Dashboard");
-    });
-    return unsubscribe;
-  }, [navigation]);
+
+  //23/12
+  // React.useEffect(() => {
+  //   const unsubscribe = navigation.addListener("beforeRemove", () => {
+  //     navigation.navigate("Dashboard");
+  //   });
+  //   return unsubscribe;
+  // }, [navigation]);
 
   return loader ? (
     <Spinner />
@@ -132,6 +134,7 @@ const AddArticle = ({
             handleSubmit={handleSubmit}
             shipment={article}
             loader={loader}
+            handleBack={handleBack}
             // error={error}
             // page={page}
           />

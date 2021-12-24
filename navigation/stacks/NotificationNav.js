@@ -26,7 +26,7 @@ const NotificationNav = ({ headerData, handleHeader }) => {
       }}
       headerMode="float"
     >
-      <Stack.Screen name="Newsfeed">
+      <Stack.Screen name="Notification">
         {(props) => (
           <View style={styles.mainBg}>
             <Notifications {...props} handleHeader={handleHeader} />
